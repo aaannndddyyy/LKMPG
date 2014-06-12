@@ -1573,12 +1573,9 @@ BE CARREFUL: when a sequence is finished, another one starts. That means that at
 
 *** Figure: How seq_file works
 
-[seq_file]
-
-Seq_file provides basic functions for file_operations, as seq_read,
-seq_lseek, and some others. But nothing to write in the /proc file. Of
-course, you can still use the same way as in the previous example.
-
+| [[./seq_file.jpg]]                                                                                                                                                                                                |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Seq_file provides basic functions for file_operations, as seq_read, seq_lseek, and some others. But nothing to write in the /proc file. Of course, you can still use the same way as in the previous example. |
 
 *** Example: procfs4.c
 #+BEGIN_SRC: c
