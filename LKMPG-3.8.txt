@@ -5,7 +5,7 @@
 #+OPTIONS: ^:nil
 #+STYLE: <link rel="stylesheet" type="text/css" href="index.css" />
 
-The Linux Kernel Module Programming Guide is a free book; you may reproduce and/or modify it under the terms of the Open Software License, version 1.1. You can obtain a copy of this license at [http://opensource.org/licenses/osl.php] http://opensource.org/licenses/osl.php.
+The Linux Kernel Module Programming Guide is a free book; you may reproduce and/or modify it under the terms of the Open Software License, version 1.1. You can obtain a copy of this license at [[http://opensource.org/licenses/osl.php][http://opensource.org/licenses/osl.php]].
 
 This book is distributed in the hope it will be useful, but without any warranty, without even the implied warranty of merchantability or fitness for a particular purpose.
 
@@ -13,7 +13,7 @@ The author encourages wide distribution of this book for personal or commercial 
 
 Derivative works and translations of this document must be placed under the Open Software License, and the original copyright notice must remain intact. If you have contributed new material to this book, you must make the material and source code available for your revisions. Please make revisions and updates available directly to the document maintainer, Peter Jay Salzman <p@dirac.org>. This will allow for the merging of updates and provide consistent revisions to the Linux community.
 
-If you publish or distribute this book commercially, donations, royalties, and/or printed copies are greatly appreciated by the author and the [http://www.tldp.org] Linux Documentation Project (LDP). Contributing in this way shows your support for free software and the LDP. If you have questions or comments, please contact the address above.
+If you publish or distribute this book commercially, donations, royalties, and/or printed copies are greatly appreciated by the author and the [[http://www.tldp.org][Linux Documentation Project]] (LDP). Contributing in this way shows your support for free software and the LDP. If you have questions or comments, please contact the address above.
 
 *Foreword*
 
@@ -697,8 +697,6 @@ CC      scripts/empty.o
 If you do not desire to actually compile the kernel, you can interrupt the build process (CTRL-C) just after the SPLIT line, because at that time, the files you need will be are ready. Now you can turn back to the directory of your module and compile it: It will be built exactly according your current kernel settings, and it will load into it without any errors.
 
 * Preliminaries
-** Modules vs Programs
-
 *** How modules begin and end
 
 A program usually begins with a main() function, executes a bunch of instructions and terminates upon completion of those instructions. Kernel modules work a bit differently. A module always begin with either the init_module or the function you specify with module_init call. This is the entry function for modules; it tells the kernel what functionality the module provides and sets up the kernel to run the module's functions when they're needed. Once it does this, entry function returns and the module does nothing until the kernel wants to do something with the code that the module provides.
@@ -795,9 +793,8 @@ brw-rw----   1 root  floppy   2, 44 Jul  5  2000 /dev/fd0u1680
 
 By now you can look at these two device files and know instantly that they are block devices and are handled by same driver (block major 2). You might even be aware that these both represent your floppy drive, even if you only have one floppy drive. Why two files? One represents the floppy drive with 1.44 MB of storage. The other is the same floppy drive with 1.68 MB of storage, and corresponds to what some people call a `superformatted' disk. One that holds more data than a standard formatted floppy. So here's a case where two device files with different minor number actually represent the same piece of physical hardware. So just be aware that the word `hardware' in our discussion can mean something very abstract.
 
-* Character Device Files
-** Character Device Drivers
-*** The file_operations Structure
+* Character Device drivers
+** The file_operations Structure
 
 The file_operations structure is defined in linux/fs.h, and holds pointers to functions defined by the driver that perform various operations on the device. Each field of the structure corresponds to the address of some function defined by the driver to handle a requested operation.
 
@@ -864,7 +861,7 @@ The meaning is clear, and you should be aware that any member of the structure w
 
 An instance of struct file_operations containing pointers to functions that are used to implement read, write, open, ... syscalls is commonly named fops.
 
-*** The file structure
+** The file structure
 
 Each device is represented in the kernel by a file structure, which is defined in linux/fs.h. Be aware that a file is a kernel level structure and never appears in a user space program. It's not the same thing as a FILE, which is defined by glibc and would never appear in a kernel space function. Also, its name is a bit misleading; it represents an abstract open `file', not a file on a disk, which is represented by a structure named inode.
 
@@ -872,7 +869,7 @@ An instance of struct file is commonly named filp. You'll also see it refered to
 
 Go ahead and look at the definition of file. Most of the entries you see, like struct dentry aren't used by device drivers, and you can ignore them. This is because drivers don't fill file directly; they only use structures contained in file which are created elsewhere.
 
-*** Registering A Device
+** Registering A Device
 
 As discussed earlier, char devices are accessed through device files, usually located in /dev[7]. The major number tells you which driver handles which device file. The minor number is used only by the driver itself to differentiate which device it's operating on, just in case the driver handles more than one device.
 
@@ -888,7 +885,7 @@ Now the question is, how do you get a major number without hijacking one that's 
 
 If you pass a major number of 0 to register_chrdev, the return value will be the dynamically allocated major number. The downside is that you can't make a device file in advance, since you don't know what the major number will be. There are a couple of ways to do this. First, the driver itself can print the newly assigned number and we can make the device file by hand. Second, the newly registered device will have an entry in /proc/devices, and we can either make the device file by hand or write a shell script to read the file in and make the device file. The third method is we can have our driver make the the device file using the mknod system call after a successful registration and rm during the call to cleanup_module.
 
-*** Unregistering A Device
+** Unregistering A Device
 
 We can't allow the kernel module to be rmmod'ed whenever root feels like it. If the device file is opened by a process and then we remove the kernel module, using the file would cause a call to the memory location where the appropriate function (read/write) used to be. If we're lucky, no other code was loaded there, and we'll get an ugly error message. If we're unlucky, another kernel module was loaded into the same location, which means a jump into the middle of another function within the kernel. The results of this would be impossible to predict, but they can't be very positive.
 
@@ -900,7 +897,7 @@ Normally, when you don't want to allow something, you return an error code (a ne
 
 It's important to keep the counter accurate; if you ever do lose track of the correct usage count, you'll never be able to unload the module; it's now reboot time, boys and girls. This is bound to happen to you sooner or later during a module's development.
 
-*** chardev.c
+** chardev.c
 
 The next code sample creates a char driver named chardev. You can cat its device file.
 
@@ -1078,7 +1075,7 @@ device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 }
 #+END_SRC
 
-*** Writing Modules for Multiple Kernel Versions
+** Writing Modules for Multiple Kernel Versions
 
 The system calls, which are the major interface the kernel shows to the processes, generally stay the same across versions. A new system call may be added, but usually the old ones will behave exactly like they used to. This is necessary for backward compatibility -- a new kernel version is not supposed to break regular processes. In most cases, the device files will also remain the same. On the other hand, the internal interfaces within the kernel can and do change between versions.
 
@@ -1091,7 +1088,6 @@ While previous versions of this guide showed how you can write backward compatib
 Update: What we've said above was true for kernels up to and including 2.6.10. You might already have noticed that recent kernels look different. In case you haven't they look like 2.6.x.y now. The meaning of the first three items basically stays the same, but a subpatchlevel has been added and will indicate security fixes till the next stable patchlevel is out. So people can choose between a stable tree with security updates and use the latest kernel as developer tree. Search the kernel mailing list archives if you're interested in the full story.
 
 * The /proc File System
-** The /proc File System
 
 In Linux, there is an additional mechanism for the kernel and kernel modules to send information to processes --- the /proc file system. Originally designed to allow easy access to information about processes (hence the name), it is now used by every bit of the kernel which has something interesting to report, such as /proc/modules which provides the list of modules and /proc/meminfo which stats memory usage statistics.
 
@@ -1723,10 +1719,9 @@ void cleanup_module(void)
 
 If you want more information, you can read this web page:
 
-  * [http://lwn.net/Articles/22355/] http://lwn.net/Articles/22355/
+  * [[http://lwn.net/Articles/22355/]]
 
-  * [http://www.kernelnewbies.org/documents/seq_file_howto.txt] http://
-    www.kernelnewbies.org/documents/seq_file_howto.txt
+  * [[http://www.kernelnewbies.org/documents/seq_file_howto.txt]]
 
 
 You can also read the code of fs/seq_file.c in the linux kernel.
@@ -1737,7 +1732,6 @@ You can also read the code of fs/seq_file.c in the linux kernel.
 This is just a placeholder for now. Finally I'd like to see a (yet to be written) chapter about sysfs instead here. If you are familiar with sysfs and would like to take part in writing this chapter, feel free to contact us (the LKMPG maintainers) for further details.
 
 * Talking To Device Files
-** Talking to Device Files (writes and IOCTLs)
 
 Device files are supposed to represent physical devices. Most physical devices are used for output as well as input, so there has to be some mechanism for device drivers in the kernel to get the output to send to the device from processes. This is done by opening the device file for output and writing to it, just like writing to a file. In the following example, this is implemented by device_write.
 
@@ -2204,7 +2198,6 @@ main()
 #+END_SRC
 
 * System Calls
-** System Calls
 
 So far, the only thing we've done was to use well defined kernel mechanisms to register /proc files and device handlers. This is fine if you want to do something the kernel programmers thought you'd want, such as write a device driver. But what if you want to do something unusual, to change the behavior of the system in some way? Then, you're mostly on your own.
 
@@ -2391,7 +2384,6 @@ void cleanup_module()
 #+END_SRC
 
 * Blocking Processes
-** Blocking Processes
 
 What do you do when somebody asks you for something you can't do right away? If you're a human being and you're bothered by a human being, the only thing you can say is: "Not right now, I'm busy. Go away!". But if you're a kernel module and you're bothered by a process, you have another possibility. You can put the process to sleep until you can service it. After all, processes are being put to sleep by the kernel and woken up all the time (that's the way multiple processes appear to run on the same time on a single CPU).
 
@@ -3061,7 +3053,6 @@ dissappear. Thus you should try to keep debug code to a minimum and make sure
 it does not show up in production code.
 
 * Scheduling Tasks
-** Scheduling Tasks
 
 Very often, we have "housekeeping" tasks which have to be done at a certain time, or every so often. If the task is to be done by a process, we do it by putting it in the crontab file. If the task is to be done by a kernel module, we have two possibilities. The first is to put a process in the crontab file which will wake up the module by a system call when necessary, for example by opening a file. This is terribly inefficient, however -- we run a new process off of crontab, read a new executable to memory, and all this just to wake up a kernel module which is in memory anyway.
 
@@ -3245,8 +3236,6 @@ MODULE_LICENSE("GPL");
 #+END_SRC
 
 * Interrupt Handlers
-** Interrupt Handlers
-
 *** Interrupt Handlers
 
 Except for the last chapter, everything we did in the kernel so far we've done as a response to a process asking for it, either by dealing with a special file, sending an ioctl(), or issuing a system call. But the job of the kernel isn't just to respond to process requests. Another job, which is every bit as important, is to speak to the hardware connected to the machine.
@@ -3390,7 +3379,6 @@ MODULE_LICENSE("GPL");
 #+END_SRC
 
 * Symmetric Multi Processing
-** Symmetrical Multi-Processing
 
 One of the easiest and cheapest ways to improve hardware performance is to put more than one CPU on the board. This can be done either making the different CPU's take on different jobs (asymmetrical multi-processing) or by making them all run in parallel, doing the same job (symmetrical multi-processing, a.k.a. SMP). Doing asymmetrical multi-processing effectively requires specialized knowledge about the tasks the computer should do, which is unavailable in a general purpose operating system such as Linux. On the other hand, symmetrical multi-processing is relatively easy to implement.
 
@@ -3403,7 +3391,6 @@ In version 2.0.x, this isn't a problem because the entire kernel is in one big s
 In version 2.2.x, several CPU's can be in the kernel at the same time. This is something module writers need to be aware of.
 
 * Common Pitfalls
-** Common Pitfalls
 
 Before I send you on your way to go out into the world and write kernel modules, there are a few things I need to warn you about. If I fail to warn you and something bad happens, please report the problem to me for a full refund of the amount I was paid for your copy of the book.
 
@@ -3416,16 +3403,12 @@ You might need to do this for a short time and that is OK, but if you don't enab
 *** Sticking your head inside a large carnivore
 I probably don't have to warn you about this, but I figured I will anyway, just in case.
 
-* Appendix A. Changes: 2.0 To 2.2
-** A.1. Changes between 2.4 and 2.6
+* Appendix A. Changes: 2.4 To 2.6
 
-*** A.1.1. Changes between 2.4 and 2.6
+I don't know the entire kernel well enough to document all of the changes. Some hints for porting can be found by comparing this version of the LKMPG with it's counterpart for kernel 2.4. Apart from that, anybody who needs to port drivers from 2.4 to 2.6 kernels might want to visit [[http://lwn.net/
+Articles/driver-porting]]. If you still can't find an example that exactly meets your needs there, find a driver that's similar to your driver and present in both kernel versions. File comparison tools like xxdiff or meld can be a great help then. Also check if your driver is covered by docs in linux/Documentation/ . Before starting with porting and in case you're stuck it's a good idea to find an appropiate mailinglist and ask people there for pointers.
 
-I don't know the entire kernel well enough to document all of the changes. Some hints for porting can be found by comparing this version of the LKMPG with it's counterpart for kernel 2.4. Apart from that, anybody who needs to port drivers from 2.4 to 2.6 kernels might want to visit [http://lwn.net/
-Articles/driver-porting/] http://lwn.net/Articles/driver-porting/ . If you still can't find an example that exactly meets your needs there, find a driver that's similar to your driver and present in both kernel versions. File comparison tools like xxdiff or meld can be a great help then. Also check if your driver is covered by docs in linux/Documentation/ . Before starting with porting and in case you're stuck it's a good idea to find an appropiate mailinglist and ask people there for pointers.
-
-* Appendix B. Where To Go From Here
-** B.1. Where From Here?
+* Appendix B. Where To Go From Here?
 
 I could easily have squeezed a few more chapters into this book. I could have added a chapter about creating new file systems, or about adding new protocol stacks (as if there's a need for that -- you'd have to dig underground to find a protocol stack not supported by Linux). I could have added explanations of the kernel mechanisms we haven't touched upon, such as bootstrapping or the disk interface.
 
@@ -3503,7 +3486,7 @@ If you'd like to contribute to this guide, please contact one the maintainers fo
      once.
 [19] Meaning it is safe to use it with SMP
 * Edits
-linux/fs.h updated file_operations structure (see http://lwn.net/Articles/119652/)
+linux/fs.h updated file_operations structure (see [[http://lwn.net/Articles/119652/]])
 unregister_chrdev returns void
 Fixed procfs2.c
 Fixed procfs3.c
