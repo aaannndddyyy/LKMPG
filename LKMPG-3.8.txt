@@ -136,7 +136,6 @@ When the first caveman programmer chiseled the first program on the walls of the
 
 Here's the simplest module possible. Don't compile it yet; we'll cover module compilation in the next section.
 
-
 *** Example 2-1. hello-1.c
 #+BEGIN_SRC: c
 /*
@@ -147,17 +146,17 @@ Here's the simplest module possible. Don't compile it yet; we'll cover module co
 
 int init_module(void)
 {
-        printk(KERN_INFO "Hello world 1.\n");
+    printk(KERN_INFO "Hello world 1.\n");
 
-        /*
-         * A non 0 return means init_module failed; module can't be loaded.
-         */
-        return 0;
+    /*
+     * A non 0 return means init_module failed; module can't be loaded.
+     */
+    return 0;
 }
 
 void cleanup_module(void)
 {
-        printk(KERN_INFO "Goodbye world 1.\n");
+    printk(KERN_INFO "Goodbye world 1.\n");
 }
 #+END_SRC
 
@@ -182,7 +181,6 @@ If the priority is less than int console_loglevel, the message is printed on you
 Kernel modules need to be compiled a bit differently from regular userspace apps. Former kernel versions required us to care much about these settings, which are usually stored in Makefiles. Although hierarchically organized, many redundant settings accumulated in sublevel Makefiles and made them large and rather difficult to maintain. Fortunately, there is a new way of doing these things, called kbuild, and the build process for external loadable modules is now fully integrated into the standard kernel build mechanism. To learn more on how to compile modules which are not part of the official kernel (such as all the examples you'll find in this guide), see file linux/ Documentation/kbuild/modules.txt.
 
 So, let's look at a simple Makefile for compiling a module named hello-1.c:
-
 
 *** Example 2-2. Makefile for a basic kernel module
 #+BEGIN_SRC makefile
@@ -255,7 +253,6 @@ Here's another exercise for the reader. See that comment above the return statem
 
 As of Linux 2.4, you can rename the init and cleanup functions of your modules; they no longer have to be called init_module() and cleanup_module() respectively. This is done with the module_init() and module_exit() macros. These macros are defined in linux/init.h. The only caveat is that your init and cleanup functions must be defined before calling the macros, otherwise you'll get compilation errors. Here's an example of this technique:
 
-
 *** Example 2-3. hello-2.c
 #+BEGIN_SRC: c
 /*
@@ -268,13 +265,13 @@ As of Linux 2.4, you can rename the init and cleanup functions of your modules; 
 
 static int __init hello_2_init(void)
 {
-        printk(KERN_INFO "Hello, world 2\n");
-        return 0;
+    printk(KERN_INFO "Hello, world 2\n");
+    return 0;
 }
 
 static void __exit hello_2_exit(void)
 {
-        printk(KERN_INFO "Goodbye, world 2\n");
+    printk(KERN_INFO "Goodbye, world 2\n");
 }
 
 module_init(hello_2_init);
@@ -289,10 +286,10 @@ obj-m += hello-1.o
 obj-m += hello-2.o
 
 all:
-        make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+    make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 
 clean:
-        make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+    make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 #+END_SRC
 
 Now have a look at linux/drivers/char/Makefile for a real world example. As
@@ -321,13 +318,13 @@ static int hello3_data __initdata = 3;
 
 static int __init hello_3_init(void)
 {
-        printk(KERN_INFO "Hello, world %d\n", hello3_data);
-        return 0;
+    printk(KERN_INFO "Hello, world %d\n", hello3_data);
+    return 0;
 }
 
 static void __exit hello_3_exit(void)
 {
-        printk(KERN_INFO "Goodbye, world 3\n");
+    printk(KERN_INFO "Goodbye, world 3\n");
 }
 
 module_init(hello_3_init);
@@ -515,23 +512,23 @@ MODULE_PARM_DESC(myintArray, "An array of integers");
 
 static int __init hello_5_init(void)
 {
-        int i;
-        printk(KERN_INFO "Hello, world 5\n=============\n");
-        printk(KERN_INFO "myshort is a short integer: %hd\n", myshort);
-        printk(KERN_INFO "myint is an integer: %d\n", myint);
-        printk(KERN_INFO "mylong is a long integer: %ld\n", mylong);
-        printk(KERN_INFO "mystring is a string: %s\n", mystring);
-        for (i = 0; i < (sizeof myintArray / sizeof (int)); i++)
-        {
-                printk(KERN_INFO "myintArray[%d] = %d\n", i, myintArray[i]);
-        }
-        printk(KERN_INFO "got %d arguments for myintArray.\n", arr_argc);
-        return 0;
+    int i;
+    printk(KERN_INFO "Hello, world 5\n=============\n");
+    printk(KERN_INFO "myshort is a short integer: %hd\n", myshort);
+    printk(KERN_INFO "myint is an integer: %d\n", myint);
+    printk(KERN_INFO "mylong is a long integer: %ld\n", mylong);
+    printk(KERN_INFO "mystring is a string: %s\n", mystring);
+    for (i = 0; i < (sizeof myintArray / sizeof (int)); i++)
+    {
+        printk(KERN_INFO "myintArray[%d] = %d\n", i, myintArray[i]);
+    }
+    printk(KERN_INFO "got %d arguments for myintArray.\n", arr_argc);
+    return 0;
 }
 
 static void __exit hello_5_exit(void)
 {
-        printk(KERN_INFO "Goodbye, world 5\n");
+    printk(KERN_INFO "Goodbye, world 5\n");
 }
 
 module_init(hello_5_init);
@@ -585,8 +582,8 @@ Here's an example of such a kernel module.
 
 int init_module(void)
 {
-        printk(KERN_INFO "Hello, world - this is the kernel speaking\n");
-        return 0;
+    printk(KERN_INFO "Hello, world - this is the kernel speaking\n");
+    return 0;
 }
 #+END_SRC
 
@@ -604,7 +601,7 @@ The next file:
 
 void cleanup_module()
 {
-        printk(KERN_INFO "Short is the life of a kernel module\n");
+    printk(KERN_INFO "Short is the life of a kernel module\n");
 }
 #+END_SRC
 
@@ -622,10 +619,10 @@ obj-m += startstop.o
 startstop-objs := start.o stop.o
 
 all:
-        make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+    make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 
 clean:
-        make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+    make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 #+END_SRC
 
 This is the complete makefile for all the examples we've seen so far. The
@@ -697,7 +694,7 @@ CC      scripts/empty.o
 If you do not desire to actually compile the kernel, you can interrupt the build process (CTRL-C) just after the SPLIT line, because at that time, the files you need will be are ready. Now you can turn back to the directory of your module and compile it: It will be built exactly according your current kernel settings, and it will load into it without any errors.
 
 * Preliminaries
-*** How modules begin and end
+** How modules begin and end
 
 A program usually begins with a main() function, executes a bunch of instructions and terminates upon completion of those instructions. Kernel modules work a bit differently. A module always begin with either the init_module or the function you specify with module_init call. This is the entry function for modules; it tells the kernel what functionality the module provides and sets up the kernel to run the module's functions when they're needed. Once it does this, entry function returns and the module does nothing until the kernel wants to do something with the code that the module provides.
 
@@ -705,7 +702,7 @@ All modules end by calling either cleanup_module or the function you specify wit
 
 Every module must have an entry function and an exit function. Since there's more than one way to specify entry and exit functions, I'll try my best to use the terms `entry function' and `exit function', but if I slip and simply refer to them as init_module and cleanup_module, I think you'll know what I mean.
 
-*** Functions available to modules
+** Functions available to modules
 
 Programmers use functions they don't define all the time. A prime example of this is printf(). You use these library functions which are provided by the standard C library, libc. The definitions for these functions don't actually enter your program until the linking stage, which insures that the code (for printf() for example) is available, and fixes the call instruction to point to that code.
 
@@ -725,21 +722,21 @@ with gcc -Wall -o hello hello.c. Run the exectable with strace ./hello. Are you 
 
 You can even write modules to replace the kernel's system calls, which we'll do shortly. Crackers often make use of this sort of thing for backdoors or trojans, but you can write your own modules to do more benign things, like have the kernel write Tee hee, that tickles! everytime someone tries to delete a file on your system.
 
-*** User Space vs Kernel Space
+** User Space vs Kernel Space
 
 A kernel is all about access to resources, whether the resource in question happens to be a video card, a hard drive or even memory. Programs often compete for the same resource. As I just saved this document, updatedb started updating the locate database. My vim session and updatedb are both using the hard drive concurrently. The kernel needs to keep things orderly, and not give users access to resources whenever they feel like it. To this end, a CPU can run in different modes. Each mode gives a different level of freedom to do what you want on the system. The Intel 80386 architecture has 4 of these modes, which are called rings. Unix uses only two rings; the highest ring (ring 0, also known as `supervisor mode' where everything is allowed to happen) and the lowest ring, which is called `user mode'.
 
 Recall the discussion about library functions vs system calls. Typically, you use a library function in user mode. The library function calls one or more system calls, and these system calls execute on the library function's behalf, but do so in supervisor mode since they are part of the kernel itself. Once the system call completes its task, it returns and execution gets transfered back to user mode.
 
-*** Name Space
+** Name Space
 
 When you write a small C program, you use variables which are convenient and make sense to the reader. If, on the other hand, you're writing routines which will be part of a bigger problem, any global variables you have are part of a community of other peoples' global variables; some of the variable names can clash. When a program has lots of global variables which aren't meaningful enough to be distinguished, you get namespace pollution. In large projects, effort must be made to remember reserved names, and to find ways to develop a scheme for naming unique variable names and symbols.
 
 When writing kernel code, even the smallest module will be linked against the entire kernel, so this is definitely an issue. The best way to deal with this is to declare all your variables as static and to use a well-defined prefix for your symbols. By convention, all kernel prefixes are lowercase. If you don't want to declare everything as static, another option is to declare a symbol table and register it with a kernel. We'll get to this later.
 
-The file /proc/kallsyms holds all the symbols that the kernel knows about and which are therefore accessible to your modules since they share the kernel's codespace.
+The file */proc/kallsyms* holds all the symbols that the kernel knows about and which are therefore accessible to your modules since they share the kernel's codespace.
 
-*** Code space
+** Code space
 
 Memory management is a very complicated subject---the majority of O'Reilly's `Understanding The Linux Kernel' is just on memory management! We're not setting out to be experts on memory managements, but we do need to know a couple of facts to even begin worrying about writing real modules.
 
@@ -749,7 +746,7 @@ The kernel has its own space of memory as well. Since a module is code which can
 
 By the way, I would like to point out that the above discussion is true for any operating system which uses a monolithic kernel[6]. There are things called microkernels which have modules which get their own codespace. The GNU Hurd and QNX Neutrino are two examples of a microkernel.
 
-*** Device Drivers
+** Device Drivers
 
 One class of module is the device driver, which provides functionality for hardware like a TV card or a serial port. On unix, each piece of hardware is represented by a file located in /dev named a device file which provides the means to communicate with the hardware. The device driver provides the communication on behalf of a user program. So the es1370.o sound card device driver might connect the /dev/sound device file to the Ensoniq IS1370 sound card. A userspace program like mp3blaster can use /dev/sound without ever knowing what kind of sound card is installed.
 
@@ -879,17 +876,17 @@ Adding a driver to your system means registering it with the kernel. This is syn
 int register_chrdev(unsigned int major, const char *name, struct file_operations *fops);
 #+END_SRC
 
-where unsigned int major is the major number you want to request, const char *name is the name of the device as it'll appear in /proc/devices and struct file_operations *fops is a pointer to the file_operations table for your driver. A negative return value means the registration failed. Note that we didn't pass the minor number to register_chrdev. That's because the kernel doesn't care about the minor number; only our driver uses it.
+where unsigned int major is the major number you want to request, /const char *name/ is the name of the device as it'll appear in */proc/devices* and /struct file_operations *fops/ is a pointer to the file_operations table for your driver. A negative return value means the registration failed. Note that we didn't pass the minor number to register_chrdev. That's because the kernel doesn't care about the minor number; only our driver uses it.
 
 Now the question is, how do you get a major number without hijacking one that's already in use? The easiest way would be to look through Documentation /devices.txt and pick an unused one. That's a bad way of doing things because you'll never be sure if the number you picked will be assigned later. The answer is that you can ask the kernel to assign you a dynamic major number.
 
-If you pass a major number of 0 to register_chrdev, the return value will be the dynamically allocated major number. The downside is that you can't make a device file in advance, since you don't know what the major number will be. There are a couple of ways to do this. First, the driver itself can print the newly assigned number and we can make the device file by hand. Second, the newly registered device will have an entry in /proc/devices, and we can either make the device file by hand or write a shell script to read the file in and make the device file. The third method is we can have our driver make the the device file using the mknod system call after a successful registration and rm during the call to cleanup_module.
+If you pass a major number of 0 to register_chrdev, the return value will be the dynamically allocated major number. The downside is that you can't make a device file in advance, since you don't know what the major number will be. There are a couple of ways to do this. First, the driver itself can print the newly assigned number and we can make the device file by hand. Second, the newly registered device will have an entry in */proc/devices*, and we can either make the device file by hand or write a shell script to read the file in and make the device file. The third method is we can have our driver make the the device file using the mknod system call after a successful registration and rm during the call to cleanup_module.
 
 ** Unregistering A Device
 
 We can't allow the kernel module to be rmmod'ed whenever root feels like it. If the device file is opened by a process and then we remove the kernel module, using the file would cause a call to the memory location where the appropriate function (read/write) used to be. If we're lucky, no other code was loaded there, and we'll get an ugly error message. If we're unlucky, another kernel module was loaded into the same location, which means a jump into the middle of another function within the kernel. The results of this would be impossible to predict, but they can't be very positive.
 
-Normally, when you don't want to allow something, you return an error code (a negative number) from the function which is supposed to do it. With cleanup_module that's impossible because it's a void function. However, there's a counter which keeps track of how many processes are using your module. You can see what it's value is by looking at the 3rd field of /proc/modules. If this number isn't zero, rmmod will fail. Note that you don't have to check the counter from within cleanup_module because the check will be performed for you by the system call sys_delete_module, defined in linux/module.c. You shouldn't use this counter directly, but there are functions defined in linux/module.h which let you increase, decrease and display this counter:
+Normally, when you don't want to allow something, you return an error code (a negative number) from the function which is supposed to do it. With cleanup_module that's impossible because it's a void function. However, there's a counter which keeps track of how many processes are using your module. You can see what it's value is by looking at the 3rd field of */proc/modules*. If this number isn't zero, rmmod will fail. Note that you don't have to check the counter from within cleanup_module because the check will be performed for you by the system call sys_delete_module, defined in linux/module.c. You shouldn't use this counter directly, but there are functions defined in linux/module.h which let you increase, decrease and display this counter:
 
  * try_module_get(THIS_MODULE): Increment the use count.
 
@@ -901,11 +898,13 @@ It's important to keep the counter accurate; if you ever do lose track of the co
 
 The next code sample creates a char driver named chardev. You can cat its device file.
 
-  cat /proc/devices
+#+BEGIN_SRC: bash
+cat /proc/devices
+#+END_SRC
 
 (or open the file with a program) and the driver will put the number of times the device file has been read from into the file. We don't support writing to the file (like echo "hi" > /dev/hello), but catch these attempts and tell the user that the operation isn't supported. Don't worry if you don't see what we do with the data we read into the buffer; we don't do much with it. We simply read in the data and print a message acknowledging that we received it.
 
-**** Example 4-1. chardev.c
+*** Example 4-1. chardev.c
 #+BEGIN_SRC: c
 /*
  *  chardev.c: Creates a read-only char device that says how many times
@@ -1089,19 +1088,19 @@ Update: What we've said above was true for kernels up to and including 2.6.10. Y
 
 * The /proc File System
 
-In Linux, there is an additional mechanism for the kernel and kernel modules to send information to processes --- the /proc file system. Originally designed to allow easy access to information about processes (hence the name), it is now used by every bit of the kernel which has something interesting to report, such as /proc/modules which provides the list of modules and /proc/meminfo which stats memory usage statistics.
+In Linux, there is an additional mechanism for the kernel and kernel modules to send information to processes --- the */proc* file system. Originally designed to allow easy access to information about processes (hence the name), it is now used by every bit of the kernel which has something interesting to report, such as */proc/modules* which provides the list of modules and */proc/meminfo* which stats memory usage statistics.
 
-The method to use the proc file system is very similar to the one used with device drivers --- a structure is created with all the information needed for the /proc file, including pointers to any handler functions (in our case there is only one, the one called when somebody attempts to read from the / proc file). Then, init_module registers the structure with the kernel and cleanup_module unregisters it.
+The method to use the proc file system is very similar to the one used with device drivers --- a structure is created with all the information needed for the */proc* file, including pointers to any handler functions (in our case there is only one, the one called when somebody attempts to read from the / proc file). Then, init_module registers the structure with the kernel and cleanup_module unregisters it.
 
-The reason we use proc_register_dynamic[8] is because we don't want to determine the inode number used for our file in advance, but to allow the kernel to determine it to prevent clashes. Normal file systems are located on a disk, rather than just in memory (which is where /proc is), and in that case the inode number is a pointer to a disk location where the file's index-node (inode for short) is located. The inode contains information about the file, for example the file's permissions, together with a pointer to the disk location or locations where the file's data can be found.
+The reason we use proc_register_dynamic[8] is because we don't want to determine the inode number used for our file in advance, but to allow the kernel to determine it to prevent clashes. Normal file systems are located on a disk, rather than just in memory (which is where */proc* is), and in that case the inode number is a pointer to a disk location where the file's index-node (inode for short) is located. The inode contains information about the file, for example the file's permissions, together with a pointer to the disk location or locations where the file's data can be found.
 
 Because we don't get called when the file is opened or closed, there's nowhere for us to put try_module_get and try_module_put in this module, and if the file is opened and then the module is removed, there's no way to avoid the consequences.
 
-Here a simple example showing how to use a /proc file. This is the HelloWorld for the /proc filesystem. There are three parts: create the file /proc/ helloworld in the function init_module, return a value (and a buffer) when the file /proc/helloworld is read in the callback function procfs_read, and delete the file /proc/helloworld in the function cleanup_module.
+Here a simple example showing how to use a */proc* file. This is the HelloWorld for the */proc* filesystem. There are three parts: create the file */proc/ helloworld* in the function init_module, return a value (and a buffer) when the file */proc/helloworld* is read in the callback function *procfs_read*, and delete the file */proc/helloworld* in the function cleanup_module.
 
-The /proc/helloworld is created when the module is loaded with the function create_proc_entry. The return value is a 'struct proc_dir_entry *', and it will be used to configure the file /proc/helloworld (for example, the owner of this file). A null return value means that the creation has failed.
+The */proc/helloworld* is created when the module is loaded with the function create_proc_entry. The return value is a 'struct proc_dir_entry *', and it will be used to configure the file */proc/helloworld* (for example, the owner of this file). A null return value means that the creation has failed.
 
-Each time, everytime the file /proc/helloworld is read, the function procfs_read is called. Two parameters of this function are very important: the buffer (the first parameter) and the offset (the third one). The content of the buffer will be returned to the application which read it (for example the cat command). The offset is the current position in the file. If the return value of the function isn't null, then this function is called again. So be careful with this function, if it never returns zero, the read function is called endlessly.
+Each time, everytime the file */proc/helloworld* is read, the function procfs_read is called. Two parameters of this function are very important: the buffer (the first parameter) and the offset (the third one). The content of the buffer will be returned to the application which read it (for example the cat command). The offset is the current position in the file. If the return value of the function isn't null, then this function is called again. So be careful with this function, if it never returns zero, the read function is called endlessly.
 
 #+BEGIN_SRC: sh
 % cat /proc/helloworld
@@ -1168,58 +1167,58 @@ procfile_read(char *buffer,
               char **buffer_location,
               off_t offset, int buffer_length, int *eof, void *data)
 {
-        int ret;
+    int ret;
 
-        printk(KERN_INFO "procfile_read (/proc/%s) called\n", procfs_name);
+    printk(KERN_INFO "procfile_read (/proc/%s) called\n", procfs_name);
 
-        /*
-         * We give all of our information in one go, so if the
-         * user asks us if we have more information the
-         * answer should always be no.
-         *
-         * This is important because the standard read
-         * function from the library would continue to issue
-         * the read system call until the kernel replies
-         * that it has no more information, or until its
-         * buffer is filled.
-         */
-        if (offset > 0) {
-                /* we have finished to read, return 0 */
-                ret  = 0;
-        } else {
-                /* fill the buffer, return the buffer size */
-                ret = sprintf(buffer, "HelloWorld!\n");
-        }
+    /*
+     * We give all of our information in one go, so if the
+     * user asks us if we have more information the
+     * answer should always be no.
+     *
+     * This is important because the standard read
+     * function from the library would continue to issue
+     * the read system call until the kernel replies
+     * that it has no more information, or until its
+     * buffer is filled.
+     */
+    if (offset > 0) {
+        /* we have finished to read, return 0 */
+        ret  = 0;
+    } else {
+        /* fill the buffer, return the buffer size */
+        ret = sprintf(buffer, "HelloWorld!\n");
+    }
 
-        return ret;
+    return ret;
 }
 
 int init_module()
 {
-        Our_Proc_File = create_proc_entry(procfs_name, 0644, NULL);
+    Our_Proc_File = create_proc_entry(procfs_name, 0644, NULL);
 
-        if (Our_Proc_File == NULL) {
-                remove_proc_entry(procfs_name, &proc_root);
-                printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
-                       procfs_name);
-                return -ENOMEM;
-        }
+    if (Our_Proc_File == NULL) {
+        remove_proc_entry(procfs_name, &proc_root);
+        printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
+               procfs_name);
+        return -ENOMEM;
+    }
 
-        Our_Proc_File->read_proc = procfile_read;
-        Our_Proc_File->owner     = THIS_MODULE;
-        Our_Proc_File->mode      = S_IFREG | S_IRUGO;
-        Our_Proc_File->uid       = 0;
-        Our_Proc_File->gid       = 0;
-        Our_Proc_File->size      = 37;
+    Our_Proc_File->read_proc = procfile_read;
+    Our_Proc_File->owner     = THIS_MODULE;
+    Our_Proc_File->mode      = S_IFREG | S_IRUGO;
+    Our_Proc_File->uid       = 0;
+    Our_Proc_File->gid       = 0;
+    Our_Proc_File->size      = 37;
 
-        printk(KERN_INFO "/proc/%s created\n", procfs_name);
-        return 0;       /* everything is ok */
+    printk(KERN_INFO "/proc/%s created\n", procfs_name);
+    return 0;       /* everything is ok */
 }
 
 void cleanup_module()
 {
-        remove_proc_entry(procfs_name, &proc_root);
-        printk(KERN_INFO "/proc/%s removed\n", procfs_name);
+    remove_proc_entry(procfs_name, &proc_root);
+    printk(KERN_INFO "/proc/%s removed\n", procfs_name);
 }
 #+END_SRC
 
@@ -1273,20 +1272,20 @@ procfile_read(char *buffer,
               char **buffer_location,
               off_t offset, int buffer_length, int *eof, void *data)
 {
-        int ret;
+    int ret;
 
-        printk(KERN_INFO "procfile_read (/proc/%s) called\n", PROCFS_NAME);
+    printk(KERN_INFO "procfile_read (/proc/%s) called\n", PROCFS_NAME);
 
-        if (offset > 0) {
-                /* we have finished to read, return 0 */
-                ret  = 0;
-        } else {
-                /* fill the buffer, return the buffer size */
-                memcpy(buffer, procfs_buffer, procfs_buffer_size);
-                ret = procfs_buffer_size;
-        }
+    if (offset > 0) {
+        /* we have finished to read, return 0 */
+        ret  = 0;
+    } else {
+        /* fill the buffer, return the buffer size */
+        memcpy(buffer, procfs_buffer, procfs_buffer_size);
+        ret = procfs_buffer_size;
+    }
 
-        return ret;
+    return ret;
 }
 
 /**
@@ -1296,18 +1295,18 @@ procfile_read(char *buffer,
 int procfile_write(struct file *file, const char *buffer, unsigned long count,
                    void *data)
 {
-        /* get buffer size */
-        procfs_buffer_size = count;
-        if (procfs_buffer_size > PROCFS_MAX_SIZE ) {
-                procfs_buffer_size = PROCFS_MAX_SIZE;
-        }
+    /* get buffer size */
+    procfs_buffer_size = count;
+    if (procfs_buffer_size > PROCFS_MAX_SIZE ) {
+        procfs_buffer_size = PROCFS_MAX_SIZE;
+    }
 
-        /* write data to the buffer */
-        if ( copy_from_user(procfs_buffer, buffer, procfs_buffer_size) ) {
-                return -EFAULT;
-        }
+    /* write data to the buffer */
+    if ( copy_from_user(procfs_buffer, buffer, procfs_buffer_size) ) {
+        return -EFAULT;
+    }
 
-        return procfs_buffer_size;
+    return procfs_buffer_size;
 }
 
 /**
@@ -1316,25 +1315,25 @@ int procfile_write(struct file *file, const char *buffer, unsigned long count,
  */
 int init_module()
 {
-        /* create the /proc file */
-		Our_Proc_File = proc_create(PROCFS_NAME, 0, NULL, NULL);
+    /* create the /proc file */
+    Our_Proc_File = proc_create(PROCFS_NAME, 0, NULL, NULL);
 
-        if (Our_Proc_File == NULL) {
-                remove_proc_entry(PROCFS_NAME, NULL);
-                printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
-                        PROCFS_NAME);
-                return -ENOMEM;
-        }
+    if (Our_Proc_File == NULL) {
+        remove_proc_entry(PROCFS_NAME, NULL);
+        printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
+               PROCFS_NAME);
+        return -ENOMEM;
+    }
 
-        Our_Proc_File->read_proc  = procfile_read;
-        Our_Proc_File->write_proc = procfile_write;
-        Our_Proc_File->mode       = S_IFREG | S_IRUGO;
-        Our_Proc_File->uid        = 0;
-        Our_Proc_File->gid        = 0;
-        Our_Proc_File->size       = 37;
+    Our_Proc_File->read_proc  = procfile_read;
+    Our_Proc_File->write_proc = procfile_write;
+    Our_Proc_File->mode       = S_IFREG | S_IRUGO;
+    Our_Proc_File->uid        = 0;
+    Our_Proc_File->gid        = 0;
+    Our_Proc_File->size       = 37;
 
-        printk(KERN_INFO "/proc/%s created\n", PROCFS_NAME);
-        return 0;       /* everything is ok */
+    printk(KERN_INFO "/proc/%s created\n", PROCFS_NAME);
+    return 0;       /* everything is ok */
 }
 
 /**
@@ -1343,8 +1342,8 @@ int init_module()
  */
 void cleanup_module()
 {
-        remove_proc_entry(PROCFS_NAME, NULL);
-        printk(KERN_INFO "/proc/%s removed\n", PROCFS_NAME);
+    remove_proc_entry(PROCFS_NAME, NULL);
+    printk(KERN_INFO "/proc/%s removed\n", PROCFS_NAME);
 }
 #+END_SRC
 
@@ -1401,34 +1400,34 @@ static ssize_t procfs_read(struct file *filp,   /* see include/linux/fs.h   */
                              size_t length,     /* length of the buffer     */
                              loff_t * offset)
 {
-        static int finished = 0;
+    static int finished = 0;
 
-        /*
-         * We return 0 to indicate end of file, that we have
-         * no more information. Otherwise, processes will
-         * continue to read from us in an endless loop.
-         */
-        if ( finished ) {
-                printk(KERN_INFO "procfs_read: END\n");
-                finished = 0;
-                return 0;
-        }
+    /*
+     * We return 0 to indicate end of file, that we have
+     * no more information. Otherwise, processes will
+     * continue to read from us in an endless loop.
+     */
+    if ( finished ) {
+        printk(KERN_INFO "procfs_read: END\n");
+        finished = 0;
+        return 0;
+    }
 
-        finished = 1;
+    finished = 1;
 
-        /*
-         * We use put_to_user to copy the string from the kernel's
-         * memory segment to the memory segment of the process
-         * that called us. get_from_user, BTW, is
-         * used for the reverse.
-         */
-        if ( copy_to_user(buffer, procfs_buffer, procfs_buffer_size) ) {
-                return -EFAULT;
-        }
+    /*
+     * We use put_to_user to copy the string from the kernel's
+     * memory segment to the memory segment of the process
+     * that called us. get_from_user, BTW, is
+     * used for the reverse.
+     */
+    if ( copy_to_user(buffer, procfs_buffer, procfs_buffer_size) ) {
+        return -EFAULT;
+    }
 
-        printk(KERN_INFO "procfs_read: read %lu bytes\n", procfs_buffer_size);
+    printk(KERN_INFO "procfs_read: read %lu bytes\n", procfs_buffer_size);
 
-        return procfs_buffer_size;      /* Return the number of bytes "read" */
+    return procfs_buffer_size;      /* Return the number of bytes "read" */
 }
 
 /*
@@ -1437,20 +1436,20 @@ static ssize_t procfs_read(struct file *filp,   /* see include/linux/fs.h   */
 static ssize_t
 procfs_write(struct file *file, const char *buffer, size_t len, loff_t * off)
 {
-        if ( len > PROCFS_MAX_SIZE )    {
-                procfs_buffer_size = PROCFS_MAX_SIZE;
-        }
-        else    {
-                procfs_buffer_size = len;
-        }
+    if ( len > PROCFS_MAX_SIZE )    {
+        procfs_buffer_size = PROCFS_MAX_SIZE;
+    }
+    else {
+        procfs_buffer_size = len;
+    }
 
-        if ( copy_from_user(procfs_buffer, buffer, procfs_buffer_size) ) {
-                return -EFAULT;
-        }
+    if ( copy_from_user(procfs_buffer, buffer, procfs_buffer_size) ) {
+        return -EFAULT;
+    }
 
-        printk(KERN_INFO "procfs_write: write %lu bytes\n", procfs_buffer_size);
+    printk(KERN_INFO "procfs_write: write %lu bytes\n", procfs_buffer_size);
 
-        return procfs_buffer_size;
+    return procfs_buffer_size;
 }
 
 /*
@@ -1469,17 +1468,17 @@ procfs_write(struct file *file, const char *buffer, size_t len, loff_t * off)
  */
 static int module_permission(struct inode *inode, int op)
 {
-        /*
-         * We allow everybody to read from our module, but
-         * only root (uid 0) may write to it
-         */
-        if (op == 4 || (op == 2 && current_euid() == 0))
-                return 0;
+    /*
+     * We allow everybody to read from our module, but
+     * only root (uid 0) may write to it
+     */
+    if (op == 4 || (op == 2 && current_euid() == 0))
+        return 0;
 
-        /*
-         * If it's anything else, access is denied
-         */
-        return -EACCES;
+    /*
+     * If it's anything else, access is denied
+     */
+    return -EACCES;
 }
 
 /*
@@ -1489,8 +1488,8 @@ static int module_permission(struct inode *inode, int op)
  */
 int procfs_open(struct inode *inode, struct file *file)
 {
-        try_module_get(THIS_MODULE);
-        return 0;
+    try_module_get(THIS_MODULE);
+    return 0;
 }
 
 /*
@@ -1499,15 +1498,15 @@ int procfs_open(struct inode *inode, struct file *file)
  */
 int procfs_close(struct inode *inode, struct file *file)
 {
-        module_put(THIS_MODULE);
-        return 0;               /* success */
+    module_put(THIS_MODULE);
+    return 0;               /* success */
 }
 
 static struct file_operations File_Ops_4_Our_Proc_File = {
-        .read    = procfs_read,
-        .write   = procfs_write,
-        .open    = procfs_open,
-        .release = procfs_close,
+    .read    = procfs_read,
+    .write   = procfs_write,
+    .open    = procfs_open,
+    .release = procfs_close,
 };
 
 /*
@@ -1521,7 +1520,7 @@ static struct file_operations File_Ops_4_Our_Proc_File = {
  */
 
 static struct inode_operations Inode_Ops_4_Our_Proc_File = {
-        .permission = module_permission,        /* check for permissions */
+    .permission = module_permission,        /* check for permissions */
 };
 
 /*
@@ -1529,32 +1528,32 @@ static struct inode_operations Inode_Ops_4_Our_Proc_File = {
  */
 int init_module()
 {
-        /* create the /proc file */
-		Our_Proc_File = proc_create(PROC_ENTRY_FILENAME, 0644, NULL, NULL);
+    /* create the /proc file */
+    Our_Proc_File = proc_create(PROC_ENTRY_FILENAME, 0644, NULL, NULL);
 
-        /* check if the /proc file was created successfuly */
-        if (Our_Proc_File == NULL){
-                printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
-                       PROC_ENTRY_FILENAME);
-                return -ENOMEM;
-        }
+    /* check if the /proc file was created successfuly */
+    if (Our_Proc_File == NULL){
+        printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
+               PROC_ENTRY_FILENAME);
+        return -ENOMEM;
+    }
 
-        Our_Proc_File->proc_iops = &Inode_Ops_4_Our_Proc_File;
-        Our_Proc_File->proc_fops = &File_Ops_4_Our_Proc_File;
-        Our_Proc_File->mode = S_IFREG | S_IRUGO | S_IWUSR;
-        Our_Proc_File->uid = 0;
-        Our_Proc_File->gid = 0;
-        Our_Proc_File->size = 80;
+    Our_Proc_File->proc_iops = &Inode_Ops_4_Our_Proc_File;
+    Our_Proc_File->proc_fops = &File_Ops_4_Our_Proc_File;
+    Our_Proc_File->mode = S_IFREG | S_IRUGO | S_IWUSR;
+    Our_Proc_File->uid = 0;
+    Our_Proc_File->gid = 0;
+    Our_Proc_File->size = 80;
 
-        printk(KERN_INFO "/proc/%s created\n", PROC_ENTRY_FILENAME);
+    printk(KERN_INFO "/proc/%s created\n", PROC_ENTRY_FILENAME);
 
-        return 0;       /* success */
+    return 0;       /* success */
 }
 
 void cleanup_module()
 {
-        remove_proc_entry(PROC_ENTRY_FILENAME, NULL);
-        printk(KERN_INFO "/proc/%s removed\n", PROC_ENTRY_FILENAME);
+    remove_proc_entry(PROC_ENTRY_FILENAME, NULL);
+    printk(KERN_INFO "/proc/%s removed\n", PROC_ENTRY_FILENAME);
 }
 #+END_SRC
 
@@ -1608,20 +1607,18 @@ MODULE_LICENSE("GPL");
  */
 static void *my_seq_start(struct seq_file *s, loff_t *pos)
 {
-        static unsigned long counter = 0;
+    static unsigned long counter = 0;
 
-        /* beginning a new sequence ? */
-        if ( *pos == 0 )
-        {
-                /* yes => return a non null value to begin the sequence */
-                return &counter;
-        }
-        else
-        {
-                /* no => it's the end of the sequence, return end to stop reading */
-                *pos = 0;
-                return NULL;
-        }
+    /* beginning a new sequence ? */
+    if ( *pos == 0 ) {
+        /* yes => return a non null value to begin the sequence */
+        return &counter;
+    }
+    else {
+        /* no => it's the end of the sequence, return end to stop reading */
+        *pos = 0;
+        return NULL;
+    }
 }
 
 /**
@@ -1631,10 +1628,10 @@ static void *my_seq_start(struct seq_file *s, loff_t *pos)
  */
 static void *my_seq_next(struct seq_file *s, void *v, loff_t *pos)
 {
-        unsigned long *tmp_v = (unsigned long *)v;
-        (*tmp_v)++;
-        (*pos)++;
-        return NULL;
+    unsigned long *tmp_v = (unsigned long *)v;
+    (*tmp_v)++;
+    (*pos)++;
+    return NULL;
 }
 
 /**
@@ -1643,7 +1640,7 @@ static void *my_seq_next(struct seq_file *s, void *v, loff_t *pos)
  */
 static void my_seq_stop(struct seq_file *s, void *v)
 {
-        /* nothing to do, we use a static value in start() */
+    /* nothing to do, we use a static value in start() */
 }
 
 /**
@@ -1652,10 +1649,10 @@ static void my_seq_stop(struct seq_file *s, void *v)
  */
 static int my_seq_show(struct seq_file *s, void *v)
 {
-        loff_t *spos = (loff_t *) v;
+    loff_t *spos = (loff_t *) v;
 
-        seq_printf(s, "%Ld\n", *spos);
-        return 0;
+    seq_printf(s, "%Ld\n", *spos);
+    return 0;
 }
 
 /**
@@ -1675,7 +1672,7 @@ static struct seq_operations my_seq_ops = {
  */
 static int my_open(struct inode *inode, struct file *file)
 {
-        return seq_open(file, &my_seq_ops);
+    return seq_open(file, &my_seq_ops);
 };
 
 /**
@@ -1683,11 +1680,11 @@ static int my_open(struct inode *inode, struct file *file)
  *
  */
 static struct file_operations my_file_ops = {
-        .owner   = THIS_MODULE,
-        .open    = my_open,
-        .read    = seq_read,
-        .llseek  = seq_lseek,
-        .release = seq_release
+    .owner   = THIS_MODULE,
+    .open    = my_open,
+    .read    = seq_read,
+    .llseek  = seq_lseek,
+    .release = seq_release
 };
 
 
@@ -1697,14 +1694,14 @@ static struct file_operations my_file_ops = {
  */
 int init_module(void)
 {
-        struct proc_dir_entry *entry;
+    struct proc_dir_entry *entry;
 
-        entry = create_proc_entry(PROC_NAME, 0, NULL);
-        if (entry) {
-                entry->proc_fops = &my_file_ops;
-        }
+    entry = create_proc_entry(PROC_NAME, 0, NULL);
+    if (entry) {
+        entry->proc_fops = &my_file_ops;
+    }
 
-        return 0;
+    return 0;
 }
 
 /**
@@ -1713,7 +1710,7 @@ int init_module(void)
  */
 void cleanup_module(void)
 {
-        remove_proc_entry(PROC_NAME, NULL);
+    remove_proc_entry(PROC_NAME, NULL);
 }
 #+END_SRC
 
@@ -1743,7 +1740,7 @@ The ioctl number encodes the major device number, the type of the ioctl, the com
 
 If you want to use ioctls in your own kernel modules, it is best to receive an official ioctl assignment, so if you accidentally get somebody else's ioctls, or if they get yours, you'll know something is wrong. For more information, consult the kernel source tree at Documentation/ioctl-number.txt.
 
-*** Example 7-1. chardev.c
+** Example 7-1. chardev.c
 #+BEGIN_SRC: c
 /*
  *  chardev.c - Create an input/output character device */
@@ -1785,34 +1782,34 @@ static int device_open(struct inode *inode, struct file *file)
         printk(KERN_INFO "device_open(%p)\n", file);
 #endif
 
-        /*
-         * We don't want to talk to two processes at the same time
-         */
-        if (Device_Open)
-                return -EBUSY;
+    /*
+     * We don't want to talk to two processes at the same time
+     */
+    if (Device_Open)
+        return -EBUSY;
 
-        Device_Open++;
-        /*
-         * Initialize the message
-         */
-        Message_Ptr = Message;
-        try_module_get(THIS_MODULE);
-        return SUCCESS;
+    Device_Open++;
+    /*
+     * Initialize the message
+     */
+    Message_Ptr = Message;
+    try_module_get(THIS_MODULE);
+    return SUCCESS;
 }
 
 static int device_release(struct inode *inode, struct file *file)
 {
 #ifdef DEBUG
-        printk(KERN_INFO "device_release(%p,%p)\n", inode, file);
+    printk(KERN_INFO "device_release(%p,%p)\n", inode, file);
 #endif
 
-        /*
-         * We're now ready for our next caller
-         */
-        Device_Open--;
+    /*
+     * We're now ready for our next caller
+     */
+    Device_Open--;
 
-        module_put(THIS_MODULE);
-        return SUCCESS;
+    module_put(THIS_MODULE);
+    return SUCCESS;
 }
 
 /*
@@ -1825,48 +1822,48 @@ static ssize_t device_read(struct file *file,   /* see include/linux/fs.h   */
                            size_t length,       /* length of the buffer     */
                            loff_t * offset)
 {
-        /*
-         * Number of bytes actually written to the buffer
-         */
-        int bytes_read = 0;
+    /*
+     * Number of bytes actually written to the buffer
+     */
+    int bytes_read = 0;
 
 #ifdef DEBUG
-        printk(KERN_INFO "device_read(%p,%p,%d)\n", file, buffer, length);
+    printk(KERN_INFO "device_read(%p,%p,%d)\n", file, buffer, length);
 #endif
 
-        /*
-         * If we're at the end of the message, return 0
-         * (which signifies end of file)
-         */
-        if (*Message_Ptr == 0)
-                return 0;
+    /*
+     * If we're at the end of the message, return 0
+     * (which signifies end of file)
+     */
+    if (*Message_Ptr == 0)
+        return 0;
 
-        /*
-         * Actually put the data into the buffer
-         */
-        while (length && *Message_Ptr) {
+    /*
+     * Actually put the data into the buffer
+     */
+    while (length && *Message_Ptr) {
 
-                /*
-                 * Because the buffer is in the user data segment,
-                 * not the kernel data segment, assignment wouldn't
-                 * work. Instead, we have to use put_user which
-                 * copies data from the kernel data segment to the
-                 * user data segment.
-                 */
-                put_user(*(Message_Ptr++), buffer++);
-                length--;
-                bytes_read++;
-        }
+    /*
+     * Because the buffer is in the user data segment,
+     * not the kernel data segment, assignment wouldn't
+     * work. Instead, we have to use put_user which
+     * copies data from the kernel data segment to the
+     * user data segment.
+     */
+     put_user(*(Message_Ptr++), buffer++);
+     length--;
+     bytes_read++;
+}
 
 #ifdef DEBUG
-        printk(KERN_INFO "Read %d bytes, %d left\n", bytes_read, length);
+    printk(KERN_INFO "Read %d bytes, %d left\n", bytes_read, length);
 #endif
 
-        /*
-         * Read functions are supposed to return the number
-         * of bytes actually inserted into the buffer
-         */
-        return bytes_read;
+    /*
+     * Read functions are supposed to return the number
+     * of bytes actually inserted into the buffer
+     */
+    return bytes_read;
 }
 
 /*
@@ -1877,21 +1874,21 @@ static ssize_t
 device_write(struct file *file,
              const char __user * buffer, size_t length, loff_t * offset)
 {
-        int i;
+    int i;
 
 #ifdef DEBUG
-        printk(KERN_INFO "device_write(%p,%s,%d)", file, buffer, length);
+    printk(KERN_INFO "device_write(%p,%s,%d)", file, buffer, length);
 #endif
 
-        for (i = 0; i < length && i < BUF_LEN; i++)
-                get_user(Message[i], buffer + i);
+    for (i = 0; i < length && i < BUF_LEN; i++)
+        get_user(Message[i], buffer + i);
 
-        Message_Ptr = Message;
+    Message_Ptr = Message;
 
-        /*
-         * Again, return the number of input characters used
-         */
-        return i;
+    /*
+     * Again, return the number of input characters used
+     */
+    return i;
 }
 
 /*
@@ -1908,56 +1905,56 @@ long device_ioctl(struct file *file,             /* ditto */
                   unsigned int ioctl_num,        /* number and param for ioctl */
                   unsigned long ioctl_param)
 {
-        int i;
-        char *temp;
-        char ch;
+    int i;
+    char *temp;
+    char ch;
+
+    /*
+     * Switch according to the ioctl called
+     */
+    switch (ioctl_num) {
+    case IOCTL_SET_MSG:
+        /*
+         * Receive a pointer to a message (in user space) and set that
+         * to be the device's message.  Get the parameter given to
+         * ioctl by the process.
+         */
+        temp = (char *)ioctl_param;
+
+         /*
+          * Find the length of the message
+          */
+         get_user(ch, temp);
+         for (i = 0; ch && i < BUF_LEN; i++, temp++)
+             get_user(ch, temp);
+
+         device_write(file, (char *)ioctl_param, i, 0);
+         break;
+
+    case IOCTL_GET_MSG:
+        /*
+         * Give the current message to the calling process -
+         * the parameter we got is a pointer, fill it.
+         */
+        i = device_read(file, (char *)ioctl_param, 99, 0);
 
         /*
-         * Switch according to the ioctl called
+         * Put a zero at the end of the buffer, so it will be
+         * properly terminated
          */
-        switch (ioctl_num) {
-        case IOCTL_SET_MSG:
-                /*
-                 * Receive a pointer to a message (in user space) and set that
-                 * to be the device's message.  Get the parameter given to
-                 * ioctl by the process.
-                 */
-                temp = (char *)ioctl_param;
+        put_user('\0', (char *)ioctl_param + i);
+        break;
 
-                /*
-                 * Find the length of the message
-                 */
-                get_user(ch, temp);
-                for (i = 0; ch && i < BUF_LEN; i++, temp++)
-                        get_user(ch, temp);
+    case IOCTL_GET_NTH_BYTE:
+        /*
+         * This ioctl is both input (ioctl_param) and
+         * output (the return value of this function)
+         */
+        return Message[ioctl_param];
+        break;
+    }
 
-                device_write(file, (char *)ioctl_param, i, 0);
-                break;
-
-        case IOCTL_GET_MSG:
-                /*
-                 * Give the current message to the calling process -
-                 * the parameter we got is a pointer, fill it.
-                 */
-                i = device_read(file, (char *)ioctl_param, 99, 0);
-
-                /*
-                 * Put a zero at the end of the buffer, so it will be
-                 * properly terminated
-                 */
-                put_user('\0', (char *)ioctl_param + i);
-                break;
-
-        case IOCTL_GET_NTH_BYTE:
-                /*
-                 * This ioctl is both input (ioctl_param) and
-                 * output (the return value of this function)
-                 */
-                return Message[ioctl_param];
-                break;
-        }
-
-        return SUCCESS;
+    return SUCCESS;
 }
 
 /* Module Declarations */
@@ -1982,32 +1979,32 @@ struct file_operations Fops = {
  */
 int init_module()
 {
-        int ret_val;
-        /*
-         * Register the character device (atleast try)
-         */
-        ret_val = register_chrdev(MAJOR_NUM, DEVICE_NAME, &Fops);
+    int ret_val;
+    /*
+     * Register the character device (atleast try)
+     */
+    ret_val = register_chrdev(MAJOR_NUM, DEVICE_NAME, &Fops);
 
-        /*
-         * Negative values signify an error
-         */
-        if (ret_val < 0) {
-                printk(KERN_ALERT "%s failed with %d\n",
-                       "Sorry, registering the character device ", ret_val);
-                return ret_val;
-        }
+    /*
+     * Negative values signify an error
+     */
+    if (ret_val < 0) {
+        printk(KERN_ALERT "%s failed with %d\n",
+               "Sorry, registering the character device ", ret_val);
+        return ret_val;
+    }
 
-        printk(KERN_INFO "%s The major device number is %d.\n",
-               "Registeration is a success", MAJOR_NUM);
-        printk(KERN_INFO "If you want to talk to the device driver,\n");
-        printk(KERN_INFO "you'll have to create a device file. \n");
-        printk(KERN_INFO "We suggest you use:\n");
-        printk(KERN_INFO "mknod %s c %d 0\n", DEVICE_FILE_NAME, MAJOR_NUM);
-        printk(KERN_INFO "The device file name is important, because\n");
-        printk(KERN_INFO "the ioctl program assumes that's the\n");
-        printk(KERN_INFO "file you'll use.\n");
+    printk(KERN_INFO "%s The major device number is %d.\n",
+           "Registeration is a success", MAJOR_NUM);
+    printk(KERN_INFO "If you want to talk to the device driver,\n");
+    printk(KERN_INFO "you'll have to create a device file. \n");
+    printk(KERN_INFO "We suggest you use:\n");
+    printk(KERN_INFO "mknod %s c %d 0\n", DEVICE_FILE_NAME, MAJOR_NUM);
+    printk(KERN_INFO "The device file name is important, because\n");
+    printk(KERN_INFO "the ioctl program assumes that's the\n");
+    printk(KERN_INFO "file you'll use.\n");
 
-        return 0;
+    return 0;
 }
 
 /*
@@ -2015,14 +2012,14 @@ int init_module()
  */
 void cleanup_module()
 {
-        /*
-         * Unregister the device
-         */
-        unregister_chrdev(MAJOR_NUM, DEVICE_NAME);
+    /*
+     * Unregister the device
+     */
+    unregister_chrdev(MAJOR_NUM, DEVICE_NAME);
 }
 #+END_SRC
 
-*** Example 7-2. chardev.h
+** Example 7-2. chardev.h
 #+BEGIN_SRC: c
 /*
  *  chardev.h - the header file with the ioctl definitions.
@@ -2092,7 +2089,7 @@ void cleanup_module()
 #endif
 #+END_SRC
 
-*** Example 7-3. ioctl.c
+** Example 7-3. ioctl.c
 #+BEGIN_SRC: c
 /*
  *  ioctl.c - the process to use ioctl's to control the kernel module
@@ -2119,60 +2116,59 @@ void cleanup_module()
 
 ioctl_set_msg(int file_desc, char *message)
 {
-        int ret_val;
+    int ret_val;
 
-        ret_val = ioctl(file_desc, IOCTL_SET_MSG, message);
+    ret_val = ioctl(file_desc, IOCTL_SET_MSG, message);
 
-        if (ret_val < 0) {
-                printf("ioctl_set_msg failed:%d\n", ret_val);
-                exit(-1);
-        }
+     if (ret_val < 0) {
+         printf("ioctl_set_msg failed:%d\n", ret_val);
+         exit(-1);
+     }
 }
 
 ioctl_get_msg(int file_desc)
 {
-        int ret_val;
-        char message[100];
+    int ret_val;
+    char message[100];
 
-        /*
-         * Warning - this is dangerous because we don't tell
-         * the kernel how far it's allowed to write, so it
-         * might overflow the buffer. In a real production
-         * program, we would have used two ioctls - one to tell
-         * the kernel the buffer length and another to give
-         * it the buffer to fill
-         */
-        ret_val = ioctl(file_desc, IOCTL_GET_MSG, message);
+    /*
+     * Warning - this is dangerous because we don't tell
+     * the kernel how far it's allowed to write, so it
+     * might overflow the buffer. In a real production
+     * program, we would have used two ioctls - one to tell
+     * the kernel the buffer length and another to give
+     * it the buffer to fill
+     */
+    ret_val = ioctl(file_desc, IOCTL_GET_MSG, message);
 
-        if (ret_val < 0) {
-                printf("ioctl_get_msg failed:%d\n", ret_val);
-                exit(-1);
-        }
+    if (ret_val < 0) {
+        printf("ioctl_get_msg failed:%d\n", ret_val);
+        exit(-1);
+    }
 
-        printf("get_msg message:%s\n", message);
+    printf("get_msg message:%s\n", message);
 }
 
 ioctl_get_nth_byte(int file_desc)
 {
-        int i;
-        char c;
+    int i;
+    char c;
 
-        printf("get_nth_byte message:");
+    printf("get_nth_byte message:");
 
-        i = 0;
-        do {
-                c = ioctl(file_desc, IOCTL_GET_NTH_BYTE, i++);
+    i = 0;
+    do {
+        c = ioctl(file_desc, IOCTL_GET_NTH_BYTE, i++);
 
-                if (c < 0) {
-                        printf
-                            ("ioctl_get_nth_byte failed at the %d'th byte:\n",
-                             i);
-                        exit(-1);
-                }
+        if (c < 0) {
+            printf("ioctl_get_nth_byte failed at the %d'th byte:\n",
+                   i);
+            exit(-1);
+        }
 
-                putchar(c);
-        } while (c != 0);
-        putchar('\n');
+        putchar(c);
+    } while (c != 0);
+    putchar('\n');
 }
 
 /*
@@ -2180,20 +2176,20 @@ ioctl_get_nth_byte(int file_desc)
  */
 main()
 {
-        int file_desc, ret_val;
-        char *msg = "Message passed by ioctl\n";
+    int file_desc, ret_val;
+    char *msg = "Message passed by ioctl\n";
 
-        file_desc = open(DEVICE_FILE_NAME, 0);
-        if (file_desc < 0) {
-                printf("Can't open device file: %s\n", DEVICE_FILE_NAME);
-                exit(-1);
-        }
+    file_desc = open(DEVICE_FILE_NAME, 0);
+    if (file_desc < 0) {
+        printf("Can't open device file: %s\n", DEVICE_FILE_NAME);
+        exit(-1);
+    }
 
-        ioctl_get_nth_byte(file_desc);
-        ioctl_get_msg(file_desc);
-        ioctl_set_msg(file_desc, msg);
+    ioctl_get_nth_byte(file_desc);
+    ioctl_get_msg(file_desc);
+    ioctl_set_msg(file_desc, msg);
 
-        close(file_desc);
+    close(file_desc);
 }
 #+END_SRC
 
@@ -2221,8 +2217,7 @@ Now, if B is removed first, everything will be well---it will simply restore the
 
 Note that all the related problems make syscall stealing unfeasiable for production use. In order to keep people from doing potential harmful things sys_call_table is no longer exported. This means, if you want to do something more than a mere dry run of this example, you will have to patch your current kernel in order to have sys_call_table exported. In the example directory you will find a README and the patch. As you can imagine, such modifications are not to be taken lightly. Do not try this on valueable systems (ie systems that you do not own - or cannot restore easily). You'll need to get the complete sourcecode of this guide as a tarball in order to get the patch and the README. Depending on your kernel version, you might even need to hand apply the patch. Still here? Well, so is this chapter. If Wyle E. Coyote was a kernel hacker, this would be the first thing he'd try. ;)
 
-
-*** Example 8-1. syscall.c
+** Example 8-1. syscall.c
 #+BEGIN_SRC: c
 /*
  *  syscall.c
@@ -2303,30 +2298,30 @@ asmlinkage int (*original_call) (const char *, int, int);
  */
 asmlinkage int our_sys_open(const char *filename, int flags, int mode)
 {
-        int i = 0;
-        char ch;
+    int i = 0;
+    char ch;
 
+    /*
+     * Check if this is the user we're spying on
+     */
+    if (uid == current->uid) {
         /*
-         * Check if this is the user we're spying on
+         * Report the file, if relevant
          */
-        if (uid == current->uid) {
-                /*
-                 * Report the file, if relevant
-                 */
-                printk("Opened file by %d: ", uid);
-                do {
-                        get_user(ch, filename + i);
-                        i++;
-                        printk("%c", ch);
-                } while (ch != 0);
-                printk("\n");
-        }
+        printk("Opened file by %d: ", uid);
+        do {
+            get_user(ch, filename + i);
+            i++;
+            printk("%c", ch);
+        } while (ch != 0);
+        printk("\n");
+    }
 
-        /*
-         * Call the original sys_open - otherwise, we lose
-         * the ability to open files
-         */
-        return original_call(filename, flags, mode);
+    /*
+     * Call the original sys_open - otherwise, we lose
+     * the ability to open files
+     */
+    return original_call(filename, flags, mode);
 }
 
 /*
@@ -2334,34 +2329,34 @@ asmlinkage int our_sys_open(const char *filename, int flags, int mode)
  */
 int init_module()
 {
-        /*
-         * Warning - too late for it now, but maybe for
-         * next time...
-         */
-        printk(KERN_ALERT "I'm dangerous. I hope you did a ");
-        printk(KERN_ALERT "sync before you insmod'ed me.\n");
-        printk(KERN_ALERT "My counterpart, cleanup_module(), is even");
-        printk(KERN_ALERT "more dangerous. If\n");
-        printk(KERN_ALERT "you value your file system, it will ");
-        printk(KERN_ALERT "be \"sync; rmmod\" \n");
-        printk(KERN_ALERT "when you remove this module.\n");
+    /*
+     * Warning - too late for it now, but maybe for
+     * next time...
+     */
+    printk(KERN_ALERT "I'm dangerous. I hope you did a ");
+    printk(KERN_ALERT "sync before you insmod'ed me.\n");
+    printk(KERN_ALERT "My counterpart, cleanup_module(), is even");
+    printk(KERN_ALERT "more dangerous. If\n");
+    printk(KERN_ALERT "you value your file system, it will ");
+    printk(KERN_ALERT "be \"sync; rmmod\" \n");
+    printk(KERN_ALERT "when you remove this module.\n");
 
-        /*
-         * Keep a pointer to the original function in
-         * original_call, and then replace the system call
-         * in the system call table with our_sys_open
-         */
-        original_call = sys_call_table[__NR_open];
-        sys_call_table[__NR_open] = our_sys_open;
+    /*
+     * Keep a pointer to the original function in
+     * original_call, and then replace the system call
+     * in the system call table with our_sys_open
+     */
+    original_call = sys_call_table[__NR_open];
+    sys_call_table[__NR_open] = our_sys_open;
 
-        /*
-         * To get the address of the function for system
-         * call foo, go to sys_call_table[__NR_foo].
-         */
+    /*
+     * To get the address of the function for system
+     * call foo, go to sys_call_table[__NR_foo].
+     */
 
-        printk(KERN_INFO "Spying on UID:%d\n", uid);
+    printk(KERN_INFO "Spying on UID:%d\n", uid);
 
-        return 0;
+    return 0;
 }
 
 /*
@@ -2369,17 +2364,17 @@ int init_module()
  */
 void cleanup_module()
 {
-        /*
-         * Return the system call back to normal
-         */
-        if (sys_call_table[__NR_open] != our_sys_open) {
-                printk(KERN_ALERT "Somebody else also played with the ");
-                printk(KERN_ALERT "open system call\n");
-                printk(KERN_ALERT "The system may be left in ");
-                printk(KERN_ALERT "an unstable state.\n");
-        }
+    /*
+     * Return the system call back to normal
+     */
+    if (sys_call_table[__NR_open] != our_sys_open) {
+        printk(KERN_ALERT "Somebody else also played with the ");
+        printk(KERN_ALERT "open system call\n");
+        printk(KERN_ALERT "The system may be left in ");
+        printk(KERN_ALERT "an unstable state.\n");
+    }
 
-        sys_call_table[__NR_open] = original_call;
+    sys_call_table[__NR_open] = original_call;
 }
 #+END_SRC
 
@@ -2421,7 +2416,7 @@ Last input:
 hostname:~/lkmpg-examples/09-BlockingProcesses#
 #+END_SRC
 
-*** Example 9-1. sleep.c
+** Example 9-1. sleep.c
 #+BEGIN_SRC: c
 /*
  *  sleep.c - create a /proc file, and if several processes try to open it at
@@ -2460,29 +2455,29 @@ static ssize_t module_output(struct file *file, /* see include/linux/fs.h   */
                              size_t len,        /* The length of the buffer */
                              loff_t * offset)
 {
-        static int finished = 0;
-        int i;
-        char message[MESSAGE_LENGTH + 30];
+    static int finished = 0;
+    int i;
+    char message[MESSAGE_LENGTH + 30];
 
-        /*
-         * Return 0 to signify end of file - that we have nothing
-         * more to say at this point.
-         */
-        if (finished) {
-                finished = 0;
-                return 0;
-        }
+    /*
+     * Return 0 to signify end of file - that we have nothing
+     * more to say at this point.
+     */
+    if (finished) {
+        finished = 0;
+        return 0;
+    }
 
-        /*
-         * If you don't understand this by now, you're hopeless as a kernel
-         * programmer.
-         */
-        sprintf(message, "Last input:%s\n", Message);
-        for (i = 0; i < len && message[i]; i++)
-                put_user(message[i], buf + i);
+    /*
+     * If you don't understand this by now, you're hopeless as a kernel
+     * programmer.
+     */
+    sprintf(message, "Last input:%s\n", Message);
+    for (i = 0; i < len && message[i]; i++)
+        put_user(message[i], buf + i);
 
-        finished = 1;
-        return i;               /* Return the number of bytes "read" */
+    finished = 1;
+    return i;               /* Return the number of bytes "read" */
 }
 
 /*
@@ -2494,23 +2489,23 @@ static ssize_t module_input(struct file *file,  /* The file itself */
                             size_t length,      /* The buffer's length */
                             loff_t * offset)
 {                               /* offset to file - ignore */
-        int i;
+    int i;
 
-        /*
-         * Put the input into Message, where module_output will later be
-         * able to use it
-         */
-        for (i = 0; i < MESSAGE_LENGTH - 1 && i < length; i++)
-                get_user(Message[i], buf + i);
-        /*
-         * we want a standard, zero terminated string
-         */
-        Message[i] = '\0';
+    /*
+     * Put the input into Message, where module_output will later be
+     * able to use it
+     */
+    for (i = 0; i < MESSAGE_LENGTH - 1 && i < length; i++)
+        get_user(Message[i], buf + i);
+    /*
+     * we want a standard, zero terminated string
+     */
+    Message[i] = '\0';
 
-        /*
-         * We need to return the number of input characters used
-         */
-        return i;
+    /*
+     * We need to return the number of input characters used
+     */
+    return i;
 }
 
 /*
@@ -2527,88 +2522,88 @@ DECLARE_WAIT_QUEUE_HEAD(WaitQ);
  */
 static int module_open(struct inode *inode, struct file *file)
 {
-        /*
-         * If the file's flags include O_NONBLOCK, it means the process doesn't
-         * want to wait for the file.  In this case, if the file is already
-         * open, we should fail with -EAGAIN, meaning "you'll have to try
-         * again", instead of blocking a process which would rather stay awake.
-         */
-        if ((file->f_flags & O_NONBLOCK) && Already_Open)
-                return -EAGAIN;
+    /*
+     * If the file's flags include O_NONBLOCK, it means the process doesn't
+     * want to wait for the file.  In this case, if the file is already
+     * open, we should fail with -EAGAIN, meaning "you'll have to try
+     * again", instead of blocking a process which would rather stay awake.
+     */
+    if ((file->f_flags & O_NONBLOCK) && Already_Open)
+        return -EAGAIN;
+
+    /*
+     * This is the correct place for try_module_get(THIS_MODULE) because
+     * if a process is in the loop, which is within the kernel module,
+     * the kernel module must not be removed.
+     */
+    try_module_get(THIS_MODULE);
+
+    /*
+     * If the file is already open, wait until it isn't
+     */
+
+    while (Already_Open) {
+        int i, is_sig = 0;
 
         /*
-         * This is the correct place for try_module_get(THIS_MODULE) because
-         * if a process is in the loop, which is within the kernel module,
-         * the kernel module must not be removed.
+         * This function puts the current process, including any system
+         * calls, such as us, to sleep.  Execution will be resumed right
+         * after the function call, either because somebody called
+         * wake_up(&WaitQ) (only module_close does that, when the file
+         * is closed) or when a signal, such as Ctrl-C, is sent
+         * to the process
          */
-        try_module_get(THIS_MODULE);
+        wait_event_interruptible(WaitQ, !Already_Open);
 
         /*
-         * If the file is already open, wait until it isn't
+         * If we woke up because we got a signal we're not blocking,
+         * return -EINTR (fail the system call).  This allows processes
+         * to be killed or stopped.
          */
 
-        while (Already_Open) {
-                int i, is_sig = 0;
+        /*
+         * Emmanuel Papirakis:
+         *
+         * This is a little update to work with 2.2.*.  Signals now are contained in
+         * two words (64 bits) and are stored in a structure that contains an array of
+         * two unsigned longs.  We now have to make 2 checks in our if.
+         *
+         * Ori Pomerantz:
+         *
+         * Nobody promised me they'll never use more than 64 bits, or that this book
+         * won't be used for a version of Linux with a word size of 16 bits.  This code
+         * would work in any case.
+         */
+        for (i = 0; i < _NSIG_WORDS && !is_sig; i++)
+            is_sig =
+                current->pending.signal.sig[i] & ~current->
+                    blocked.sig[i];
 
-                /*
-                 * This function puts the current process, including any system
-                 * calls, such as us, to sleep.  Execution will be resumed right
-                 * after the function call, either because somebody called
-                 * wake_up(&WaitQ) (only module_close does that, when the file
-                 * is closed) or when a signal, such as Ctrl-C, is sent
-                 * to the process
-                 */
-                wait_event_interruptible(WaitQ, !Already_Open);
-
-                /*
-                 * If we woke up because we got a signal we're not blocking,
-                 * return -EINTR (fail the system call).  This allows processes
-                 * to be killed or stopped.
-                 */
-
-/*
- * Emmanuel Papirakis:
- *
- * This is a little update to work with 2.2.*.  Signals now are contained in
- * two words (64 bits) and are stored in a structure that contains an array of
- * two unsigned longs.  We now have to make 2 checks in our if.
- *
- * Ori Pomerantz:
- *
- * Nobody promised me they'll never use more than 64 bits, or that this book
- * won't be used for a version of Linux with a word size of 16 bits.  This code
- * would work in any case.
- */
-                for (i = 0; i < _NSIG_WORDS && !is_sig; i++)
-                        is_sig =
-                            current->pending.signal.sig[i] & ~current->
-                            blocked.sig[i];
-
-                if (is_sig) {
-                        /*
-                         * It's important to put module_put(THIS_MODULE) here,
-                         * because for processes where the open is interrupted
-                         * there will never be a corresponding close. If we
-                         * don't decrement the usage count here, we will be
-                         * left with a positive usage count which we'll have no
-                         * way to bring down to zero, giving us an immortal
-                         * module, which can only be killed by rebooting
-                         * the machine.
-                         */
-                        module_put(THIS_MODULE);
-                        return -EINTR;
-                }
+        if (is_sig) {
+            /*
+             * It's important to put module_put(THIS_MODULE) here,
+             * because for processes where the open is interrupted
+             * there will never be a corresponding close. If we
+             * don't decrement the usage count here, we will be
+             * left with a positive usage count which we'll have no
+             * way to bring down to zero, giving us an immortal
+             * module, which can only be killed by rebooting
+             * the machine.
+             */
+            module_put(THIS_MODULE);
+            return -EINTR;
         }
+    }
 
-        /*
-         * If we got here, Already_Open must be zero
-         */
+    /*
+     * If we got here, Already_Open must be zero
+     */
 
-        /*
-         * Open the file
-         */
-        Already_Open = 1;
-        return 0;               /* Allow the access */
+    /*
+     * Open the file
+     */
+     Already_Open = 1;
+     return 0;               /* Allow the access */
 }
 
 /*
@@ -2616,23 +2611,23 @@ static int module_open(struct inode *inode, struct file *file)
  */
 int module_close(struct inode *inode, struct file *file)
 {
-        /*
-         * Set Already_Open to zero, so one of the processes in the WaitQ will
-         * be able to set Already_Open back to one and to open the file. All
-         * the other processes will be called when Already_Open is back to one,
-         * so they'll go back to sleep.
-         */
-        Already_Open = 0;
+    /*
+     * Set Already_Open to zero, so one of the processes in the WaitQ will
+     * be able to set Already_Open back to one and to open the file. All
+     * the other processes will be called when Already_Open is back to one,
+     * so they'll go back to sleep.
+     */
+    Already_Open = 0;
 
-        /*
-         * Wake up all the processes in WaitQ, so if anybody is waiting for the
-         * file, they can have it.
-         */
-        wake_up(&WaitQ);
+    /*
+     * Wake up all the processes in WaitQ, so if anybody is waiting for the
+     * file, they can have it.
+     */
+    wake_up(&WaitQ);
 
-        module_put(THIS_MODULE);
+    module_put(THIS_MODULE);
 
-        return 0;               /* success */
+    return 0;               /* success */
 }
 
 /*
@@ -2649,17 +2644,17 @@ int module_close(struct inode *inode, struct file *file)
  */
 static int module_permission(struct inode *inode, int op, struct nameidata *nd)
 {
-        /*
-         * We allow everybody to read from our module, but only root (uid 0)
-         * may write to it
-         */
-        if (op == 4 || (op == 2 && current->euid == 0))
-                return 0;
+    /*
+     * We allow everybody to read from our module, but only root (uid 0)
+     * may write to it
+     */
+    if (op == 4 || (op == 2 && current->euid == 0))
+        return 0;
 
-        /*
-         * If it's anything else, access is denied
-         */
-        return -EACCES;
+    /*
+     * If it's anything else, access is denied
+     */
+    return -EACCES;
 }
 
 /*
@@ -2701,26 +2696,25 @@ static struct inode_operations Inode_Ops_4_Our_Proc_File = {
 
 int init_module()
 {
+    Our_Proc_File = create_proc_entry(PROC_ENTRY_FILENAME, 0644, NULL);
 
-        Our_Proc_File = create_proc_entry(PROC_ENTRY_FILENAME, 0644, NULL);
+    if (Our_Proc_File == NULL) {
+        remove_proc_entry(PROC_ENTRY_FILENAME, &proc_root);
+        printk(KERN_ALERT "Error: Could not initialize /proc/test\n");
+        return -ENOMEM;
+    }
 
-        if (Our_Proc_File == NULL) {
-                remove_proc_entry(PROC_ENTRY_FILENAME, &proc_root);
-                printk(KERN_ALERT "Error: Could not initialize /proc/test\n");
-                return -ENOMEM;
-        }
+    Our_Proc_File->owner = THIS_MODULE;
+    Our_Proc_File->proc_iops = &Inode_Ops_4_Our_Proc_File;
+    Our_Proc_File->proc_fops = &File_Ops_4_Our_Proc_File;
+    Our_Proc_File->mode = S_IFREG | S_IRUGO | S_IWUSR;
+    Our_Proc_File->uid = 0;
+    Our_Proc_File->gid = 0;
+    Our_Proc_File->size = 80;
 
-        Our_Proc_File->owner = THIS_MODULE;
-        Our_Proc_File->proc_iops = &Inode_Ops_4_Our_Proc_File;
-        Our_Proc_File->proc_fops = &File_Ops_4_Our_Proc_File;
-        Our_Proc_File->mode = S_IFREG | S_IRUGO | S_IWUSR;
-        Our_Proc_File->uid = 0;
-        Our_Proc_File->gid = 0;
-        Our_Proc_File->size = 80;
+    printk(KERN_INFO "/proc/test created\n");
 
-        printk(KERN_INFO "/proc/test created\n");
-
-        return 0;
+    return 0;
 }
 
 /*
@@ -2731,13 +2725,13 @@ int init_module()
  */
 void cleanup_module()
 {
-        remove_proc_entry(PROC_ENTRY_FILENAME, &proc_root);
+    remove_proc_entry(PROC_ENTRY_FILENAME, &proc_root);
 
-        printk(KERN_INFO "/proc/test removed\n");
+    printk(KERN_INFO "/proc/test removed\n");
 }
 #+END_SRC
 
-*** Example 9-2. cat_noblock.c
+** Example 9-2. cat_noblock.c
 #+BEGIN_SRC: c
 /* cat_noblock.c - open a file and display its contents, but exit rather than
  * wait for input */
@@ -2758,54 +2752,54 @@ void cleanup_module()
 
 main(int argc, char *argv[])
 {
-  int    fd;  /* The file descriptor for the file to read */
-  size_t bytes; /* The number of bytes read */
-  char   buffer[MAX_BYTES]; /* The buffer for the bytes */
+    int    fd;  /* The file descriptor for the file to read */
+    size_t bytes; /* The number of bytes read */
+    char   buffer[MAX_BYTES]; /* The buffer for the bytes */
 
 
-  /* Usage */
-  if (argc != 2) {
-    printf("Usage: %s <filename>\n", argv[0]);
-    puts("Reads the content of a file, but doesn't wait for input");
-    exit(-1);
-  }
-
-  /* Open the file for reading in non blocking mode */
-  fd = open(argv[1], O_RDONLY | O_NONBLOCK);
-
-  /* If open failed */
-  if (fd == -1) {
-    if (errno = EAGAIN)
-      puts("Open would block");
-    else
-      puts("Open failed");
-    exit(-1);
-  }
-
-  /* Read the file and output its contents */
-  do {
-    int i;
-
-    /* Read characters from the file */
-    bytes = read(fd, buffer, MAX_BYTES);
-
-    /* If there's an error, report it and die */
-    if (bytes == -1) {
-      if (errno = EAGAIN)
-        puts("Normally I'd block, but you told me not to");
-      else
-        puts("Another read error");
-      exit(-1);
+    /* Usage */
+    if (argc != 2) {
+        printf("Usage: %s <filename>\n", argv[0]);
+        puts("Reads the content of a file, but doesn't wait for input");
+        exit(-1);
     }
 
-    /* Print the characters */
-    if (bytes > 0) {
-      for(i=0; i<bytes; i++)
-        putchar(buffer[i]);
+    /* Open the file for reading in non blocking mode */
+    fd = open(argv[1], O_RDONLY | O_NONBLOCK);
+
+    /* If open failed */
+    if (fd == -1) {
+        if (errno = EAGAIN)
+            puts("Open would block");
+        else
+            puts("Open failed");
+        exit(-1);
     }
 
-    /* While there are no errors and the file isn't over */
-  } while (bytes > 0);
+    /* Read the file and output its contents */
+    do {
+        int i;
+
+        /* Read characters from the file */
+        bytes = read(fd, buffer, MAX_BYTES);
+
+        /* If there's an error, report it and die */
+        if (bytes == -1) {
+            if (errno = EAGAIN)
+                puts("Normally I'd block, but you told me not to");
+            else
+                puts("Another read error");
+            exit(-1);
+        }
+
+        /* Print the characters */
+        if (bytes > 0) {
+            for(i=0; i<bytes; i++)
+                putchar(buffer[i]);
+        }
+
+        /* While there are no errors and the file isn't over */
+    } while (bytes > 0);
 }
 #+END_SRC
 
@@ -2815,7 +2809,6 @@ main(int argc, char *argv[])
 In Section 1.2.1.2, I said that X and kernel module programming don't mix. That's true for developing kernel modules, but in actual use, you want to be able to send messages to whichever tty[15] the command to load the module came from.
 
 The way this is done is by using current, a pointer to the currently running task, to get the current task's tty structure. Then, we look inside that tty structure to find a pointer to a string write function, which we use to write a string to the tty.
-
 
 *** Example 10-1. print_string.c
 #+BEGIN_SRC: c
@@ -2836,93 +2829,93 @@ MODULE_AUTHOR("Peter Jay Salzman");
 
 static void print_string(char *str)
 {
-        struct tty_struct *my_tty;
-        const struct tty_operations *ttyops;
+    struct tty_struct *my_tty;
+    const struct tty_operations *ttyops;
 
-        /*
-         * tty struct went into signal struct in 2.6.6
-         */
+    /*
+     * tty struct went into signal struct in 2.6.6
+     */
 #if ( LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,5) )
-        /*
-         * The tty for the current task
-         */
-        my_tty = current->tty;
+    /*
+     * The tty for the current task
+     */
+    my_tty = current->tty;
 #else
-        /*
-         * The tty for the current task, for 2.6.6+ kernels
-         */
-        my_tty = current->signal->tty;
+    /*
+     * The tty for the current task, for 2.6.6+ kernels
+     */
+    my_tty = current->signal->tty;
 #endif
-		ttyops = my_tty->driver->ops;
+    ttyops = my_tty->driver->ops;
+
+    /*
+     * If my_tty is NULL, the current task has no tty you can print to
+     * (ie, if it's a daemon).  If so, there's nothing we can do.
+     */
+    if (my_tty != NULL) {
 
         /*
-         * If my_tty is NULL, the current task has no tty you can print to
-         * (ie, if it's a daemon).  If so, there's nothing we can do.
+         * my_tty->driver is a struct which holds the tty's functions,
+         * one of which (write) is used to write strings to the tty.
+         * It can be used to take a string either from the user's or
+         * kernel's memory segment.
+         *
+         * The function's 1st parameter is the tty to write to,
+         * because the same function would normally be used for all
+         * tty's of a certain type.  The 2nd parameter controls
+         * whether the function receives a string from kernel
+         * memory (false, 0) or from user memory (true, non zero).
+         * BTW: this param has been removed in Kernels > 2.6.9
+         * The (2nd) 3rd parameter is a pointer to a string.
+         * The (3rd) 4th parameter is the length of the string.
+         *
+         * As you will see below, sometimes it's necessary to use
+         * preprocessor stuff to create code that works for different
+         * kernel versions. The (naive) approach we've taken here
+         * does not scale well. The right way to deal with this
+         * is described in section 2 of
+         * linux/Documentation/SubmittingPatches
          */
-        if (my_tty != NULL) {
-
-                /*
-                 * my_tty->driver is a struct which holds the tty's functions,
-                 * one of which (write) is used to write strings to the tty.
-                 * It can be used to take a string either from the user's or
-                 * kernel's memory segment.
-                 *
-                 * The function's 1st parameter is the tty to write to,
-                 * because the same function would normally be used for all
-                 * tty's of a certain type.  The 2nd parameter controls
-                 * whether the function receives a string from kernel
-                 * memory (false, 0) or from user memory (true, non zero).
-                 * BTW: this param has been removed in Kernels > 2.6.9
-                 * The (2nd) 3rd parameter is a pointer to a string.
-                 * The (3rd) 4th parameter is the length of the string.
-                 *
-                 * As you will see below, sometimes it's necessary to use
-                 * preprocessor stuff to create code that works for different
-                 * kernel versions. The (naive) approach we've taken here
-                 * does not scale well. The right way to deal with this
-                 * is described in section 2 of
-                 * linux/Documentation/SubmittingPatches
-                 */
-                (ttyops->write) (my_tty,      /* The tty itself */
+        (ttyops->write) (my_tty,      /* The tty itself */
 #if ( LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,9) )
-                                           0,   /* Don't take the string
-                                                   from user space        */
+                         0,   /* Don't take the string
+                                 from user space        */
 #endif
-                                           str, /* String                 */
-                                           strlen(str));        /* Length */
+                         str, /* String                 */
+                         strlen(str));        /* Length */
 
-                /*
-                 * ttys were originally hardware devices, which (usually)
-                 * strictly followed the ASCII standard.  In ASCII, to move to
-                 * a new line you need two characters, a carriage return and a
-                 * line feed.  On Unix, the ASCII line feed is used for both
-                 * purposes - so we can't just use \n, because it wouldn't have
-                 * a carriage return and the next line will start at the
-                 * column right after the line feed.
-                 *
-                 * This is why text files are different between Unix and
-                 * MS Windows.  In CP/M and derivatives, like MS-DOS and
-                 * MS Windows, the ASCII standard was strictly adhered to,
-                 * and therefore a newline requirs both a LF and a CR.
-                 */
+        /*
+         * ttys were originally hardware devices, which (usually)
+         * strictly followed the ASCII standard.  In ASCII, to move to
+         * a new line you need two characters, a carriage return and a
+         * line feed.  On Unix, the ASCII line feed is used for both
+         * purposes - so we can't just use \n, because it wouldn't have
+         * a carriage return and the next line will start at the
+         * column right after the line feed.
+         *
+         * This is why text files are different between Unix and
+         * MS Windows.  In CP/M and derivatives, like MS-DOS and
+         * MS Windows, the ASCII standard was strictly adhered to,
+         * and therefore a newline requirs both a LF and a CR.
+         */
 
 #if ( LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,9) )
-                (ttyops->write) (my_tty, 0, "\015\012", 2);
+        (ttyops->write) (my_tty, 0, "\015\012", 2);
 #else
-                (ttyops->write) (my_tty, "\015\012", 2);
+        (ttyops->write) (my_tty, "\015\012", 2);
 #endif
-        }
+    }
 }
 
 static int __init print_string_init(void)
 {
-        print_string("The module has been inserted.  Hello world!");
-        return 0;
+    print_string("The module has been inserted.  Hello world!");
+    return 0;
 }
 
 static void __exit print_string_exit(void)
 {
-        print_string("The module has been removed.  Farewell world!");
+    print_string("The module has been removed.  Farewell world!");
 }
 
 module_init(print_string_init);
@@ -2934,7 +2927,6 @@ module_exit(print_string_exit);
 In certain conditions, you may desire a simpler and more direct way to communicate to the external world. Flashing keyboard LEDs can be such a solution: It is an immediate way to attract attention or to display a status condition. Keyboard LEDs are present on every hardware, they are always visible, they do not need any setup, and their use is rather simple and non-intrusive, compared to writing to a tty or a file.
 
 The following source code illustrates a minimal kernel module which, when loaded, starts blinking the keyboard LEDs until it is unloaded.
-
 
 *** Example 10-2. kbleds.c
 #+BEGIN_SRC: c
@@ -2980,76 +2972,70 @@ char kbledstatus = 0;
 
 static void my_timer_func(unsigned long ptr)
 {
-        unsigned long *pstatus = (unsigned long *)ptr;
-        struct tty_struct* t = vc_cons[fg_console].d->port.tty;
+    unsigned long *pstatus = (unsigned long *)ptr;
+    struct tty_struct* t = vc_cons[fg_console].d->port.tty;
 
-        if (*pstatus == ALL_LEDS_ON)
-                *pstatus = RESTORE_LEDS;
-        else
-                *pstatus = ALL_LEDS_ON;
+    if (*pstatus == ALL_LEDS_ON)
+        *pstatus = RESTORE_LEDS;
+    else
+        *pstatus = ALL_LEDS_ON;
 
-(my_driver->ops->ioctl) (t, KDSETLED, *pstatus);
+    (my_driver->ops->ioctl) (t, KDSETLED, *pstatus);
 
-        my_timer.expires = jiffies + BLINK_DELAY;
-        add_timer(&my_timer);
+    my_timer.expires = jiffies + BLINK_DELAY;
+    add_timer(&my_timer);
 }
 
 static int __init kbleds_init(void)
 {
-        int i;
+    int i;
 
-        printk(KERN_INFO "kbleds: loading\n");
-        printk(KERN_INFO "kbleds: fgconsole is %x\n", fg_console);
-        for (i = 0; i < MAX_NR_CONSOLES; i++) {
-                if (!vc_cons[i].d)
-                        break;
-                printk(KERN_INFO "poet_atkm: console[%i/%i] #%i, tty %lx\n", i,
-                       MAX_NR_CONSOLES, vc_cons[i].d->vc_num,
-                       (unsigned long)vc_cons[i].d->port.tty);
-        }
-        printk(KERN_INFO "kbleds: finished scanning consoles\n");
+    printk(KERN_INFO "kbleds: loading\n");
+    printk(KERN_INFO "kbleds: fgconsole is %x\n", fg_console);
+    for (i = 0; i < MAX_NR_CONSOLES; i++) {
+        if (!vc_cons[i].d)
+            break;
+        printk(KERN_INFO "poet_atkm: console[%i/%i] #%i, tty %lx\n", i,
+               MAX_NR_CONSOLES, vc_cons[i].d->vc_num,
+               (unsigned long)vc_cons[i].d->port.tty);
+    }
+    printk(KERN_INFO "kbleds: finished scanning consoles\n");
 
-        my_driver = vc_cons[fg_console].d->port.tty->driver;
-        printk(KERN_INFO "kbleds: tty driver magic %x\n", my_driver->magic);
+    my_driver = vc_cons[fg_console].d->port.tty->driver;
+    printk(KERN_INFO "kbleds: tty driver magic %x\n", my_driver->magic);
 
-        /*
-         * Set up the LED blink timer the first time
-         */
-        init_timer(&my_timer);
-        my_timer.function = my_timer_func;
-        my_timer.data = (unsigned long)&kbledstatus;
-        my_timer.expires = jiffies + BLINK_DELAY;
-        add_timer(&my_timer);
+    /*
+     * Set up the LED blink timer the first time
+     */
+    init_timer(&my_timer);
+    my_timer.function = my_timer_func;
+    my_timer.data = (unsigned long)&kbledstatus;
+    my_timer.expires = jiffies + BLINK_DELAY;
+    add_timer(&my_timer);
 
-        return 0;
+    return 0;
 }
 
 static void __exit kbleds_cleanup(void)
 {
-        printk(KERN_INFO "kbleds: unloading...\n");
-        del_timer(&my_timer);
-        (my_driver->ops->ioctl) (vc_cons[fg_console].d->port.tty,
-									 KDSETLED, RESTORE_LEDS);
+    printk(KERN_INFO "kbleds: unloading...\n");
+    del_timer(&my_timer);
+    (my_driver->ops->ioctl) (vc_cons[fg_console].d->port.tty,
+                             KDSETLED, RESTORE_LEDS);
 }
 
 module_init(kbleds_init);
 module_exit(kbleds_cleanup);
 #+END_SRC
 
-If none of the examples in this chapter fit your debugging needs there might
-yet be some other tricks to try. Ever wondered what CONFIG_LL_DEBUG in make
-menuconfig is good for? If you activate that you get low level access to the
-serial port. While this might not sound very powerful by itself, you can
-patch kernel/printk.c or any other essential syscall to use printascii, thus
-makeing it possible to trace virtually everything what your code does over a
-serial line. If you find yourself porting the kernel to some new and former
-unsupported architecture this is usually amongst the first things that should
+If none of the examples in this chapter fit your debugging needs there might yet be some other tricks to try. Ever wondered what CONFIG_LL_DEBUG in make
+menuconfig is good for? If you activate that you get low level access to the serial port. While this might not sound very powerful by itself, you can
+patch kernel/printk.c or any other essential syscall to use printascii, thus makeing it possible to trace virtually everything what your code does over a
+serial line. If you find yourself porting the kernel to some new and former unsupported architecture this is usually amongst the first things that should
 be implemented. Logging over a netconsole might also be worth a try.
 
-While you have seen lots of stuff that can be used to aid debugging here,
-there are some things to be aware of. Debugging is almost always intrusive.
-Adding debug code can change the situation enough to make the bug seem to
-dissappear. Thus you should try to keep debug code to a minimum and make sure
+While you have seen lots of stuff that can be used to aid debugging here, there are some things to be aware of. Debugging is almost always intrusive.
+Adding debug code can change the situation enough to make the bug seem to dissappear. Thus you should try to keep debug code to a minimum and make sure
 it does not show up in production code.
 
 * Scheduling Tasks
@@ -3060,8 +3046,7 @@ Instead of doing that, we can create a function that will be called once for eve
 
 There's one more point we need to remember here. When a module is removed by rmmod, first its reference count is checked. If it is zero, module_cleanup is called. Then, the module is removed from memory with all its functions. Things need to be shut down properly, or bad things will happen. See the code below how this can be done in a safe way.
 
-
-*** Example 11-1. sched.c
+** Example 11-1. sched.c
 #+BEGIN_SRC: c
 /*
  *  sched.c - scheduale a function to be called on every timer interrupt.
@@ -3113,16 +3098,16 @@ static DECLARE_DELAYED_WORK(Task, intrpt_routine);
  */
 static void intrpt_routine(struct work_struct *work)
 {
-        /*
-         * Increment the counter
-         */
-        TimerIntrpt++;
+    /*
+     * Increment the counter
+     */
+    TimerIntrpt++;
 
-        /*
-         * If cleanup wants us to die
-         */
-        if (die == 0)
-			queue_delayed_work(my_workqueue, &Task, 100);
+    /*
+     * If cleanup wants us to die
+     */
+    if (die == 0)
+        queue_delayed_work(my_workqueue, &Task, 100);
 }
 
 /*
@@ -3133,35 +3118,35 @@ procfile_read(char *buffer,
               char **buffer_location,
               off_t offset, int buffer_length, int *eof, void *data)
 {
-        int len;                /* The number of bytes actually used */
+    int len;                /* The number of bytes actually used */
 
-        /*
-         * It's static so it will still be in memory
-         * when we leave this function
-         */
-        static char my_buffer[80];
+    /*
+     * It's static so it will still be in memory
+     * when we leave this function
+     */
+    static char my_buffer[80];
 
-        /*
-         * We give all of our information in one go, so if anybody asks us
-         * if we have more information the answer should always be no.
-         */
-        if (offset > 0)
-                return 0;
+    /*
+     * We give all of our information in one go, so if anybody asks us
+     * if we have more information the answer should always be no.
+     */
+    if (offset > 0)
+        return 0;
 
-        /*
-         * Fill the buffer and get its length
-         */
-        len = sprintf(my_buffer, "Timer called %d times so far\n", TimerIntrpt);
+    /*
+     * Fill the buffer and get its length
+     */
+    len = sprintf(my_buffer, "Timer called %d times so far\n", TimerIntrpt);
 
-        /*
-         * Tell the function which called us where the buffer is
-         */
-        *buffer_location = my_buffer;
+    /*
+     * Tell the function which called us where the buffer is
+     */
+    *buffer_location = my_buffer;
 
-        /*
-         * Return the length
-         */
-        return len;
+    /*
+     * Return the length
+     */
+    return len;
 }
 
 /*
@@ -3169,35 +3154,34 @@ procfile_read(char *buffer,
  */
 int __init init_module()
 {
-        /*
-         * Create our /proc file
-         */
+    /*
+     * Create our /proc file
+     */
 	Our_Proc_File = proc_create(PROC_ENTRY_FILENAME, 0644, NULL, NULL);
 
-        if (Our_Proc_File == NULL) {
-                remove_proc_entry(PROC_ENTRY_FILENAME, NULL);
-                printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
-                       PROC_ENTRY_FILENAME);
-                return -ENOMEM;
-        }
+    if (Our_Proc_File == NULL) {
+        remove_proc_entry(PROC_ENTRY_FILENAME, NULL);
+        printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
+               PROC_ENTRY_FILENAME);
+        return -ENOMEM;
+    }
 
-        Our_Proc_File->read_proc = procfile_read;
-        Our_Proc_File->mode = S_IFREG | S_IRUGO;
-        Our_Proc_File->uid = 0;
-        Our_Proc_File->gid = 0;
-        Our_Proc_File->size = 80;
+    Our_Proc_File->read_proc = procfile_read;
+    Our_Proc_File->mode = S_IFREG | S_IRUGO;
+    Our_Proc_File->uid = 0;
+    Our_Proc_File->gid = 0;
+    Our_Proc_File->size = 80;
 
-        /*
-         * Put the task in the work_timer task queue, so it will be executed at
-         * next timer interrupt
-         */
-        my_workqueue = create_workqueue(MY_WORK_QUEUE_NAME);
-        queue_delayed_work(my_workqueue, &Task, 100);
+    /*
+     * Put the task in the work_timer task queue, so it will be executed at
+     * next timer interrupt
+     */
+    my_workqueue = create_workqueue(MY_WORK_QUEUE_NAME);
+    queue_delayed_work(my_workqueue, &Task, 100);
 
+    printk(KERN_INFO "/proc/%s created\n", PROC_ENTRY_FILENAME);
 
-        printk(KERN_INFO "/proc/%s created\n", PROC_ENTRY_FILENAME);
-
-        return 0;
+    return 0;
 }
 
 /*
@@ -3205,27 +3189,26 @@ int __init init_module()
  */
 void __exit cleanup_module()
 {
-        /*
-         * Unregister our /proc file
-         */
-        remove_proc_entry(PROC_ENTRY_FILENAME, NULL);
-        printk(KERN_INFO "/proc/%s removed\n", PROC_ENTRY_FILENAME);
+    /*
+     * Unregister our /proc file
+     */
+    remove_proc_entry(PROC_ENTRY_FILENAME, NULL);
+    printk(KERN_INFO "/proc/%s removed\n", PROC_ENTRY_FILENAME);
 
-        die = 1;                /* keep intrp_routine from queueing itself */
-        cancel_delayed_work(&Task);     /* no "new ones" */
-        flush_workqueue(my_workqueue);  /* wait till all "old ones" finished */
-        destroy_workqueue(my_workqueue);
+    die = 1;                /* keep intrp_routine from queueing itself */
+    cancel_delayed_work(&Task);     /* no "new ones" */
+    flush_workqueue(my_workqueue);  /* wait till all "old ones" finished */
+    destroy_workqueue(my_workqueue);
 
-        /*
-         * Sleep until intrpt_routine is called one last time. This is
-         * necessary, because otherwise we'll deallocate the memory holding
-         * intrpt_routine and Task while work_timer still references them.
-         * Notice that here we don't allow signals to interrupt us.
-         *
-         * Since WaitQ is now not NULL, this automatically tells the interrupt
-         * routine it's time to die.
-         */
-
+    /*
+     * Sleep until intrpt_routine is called one last time. This is
+     * necessary, because otherwise we'll deallocate the memory holding
+     * intrpt_routine and Task while work_timer still references them.
+     * Notice that here we don't allow signals to interrupt us.
+     *
+     * Since WaitQ is now not NULL, this automatically tells the interrupt
+     * routine it's time to die.
+     */
 }
 
 /*
@@ -3236,7 +3219,7 @@ MODULE_LICENSE("GPL");
 #+END_SRC
 
 * Interrupt Handlers
-*** Interrupt Handlers
+** Interrupt Handlers
 
 Except for the last chapter, everything we did in the kernel so far we've done as a response to a process asking for it, either by dealing with a special file, sending an ioctl(), or issuing a system call. But the job of the kernel isn't just to respond to process requests. Another job, which is every bit as important, is to speak to the hardware connected to the machine.
 
@@ -3250,7 +3233,7 @@ The way to implement this is to call request_irq() to get your interrupt handler
 
 Then, from within the interrupt handler, we communicate with the hardware and then use queue_work() mark_bh(BH_IMMEDIATE) to schedule the bottom half.
 
-*** Keyboards on the Intel Architecture
+** Keyboards on the Intel Architecture
 
 The rest of this chapter is completely Intel specific. If you're not running on an Intel platform, it will not work. Don't even try to compile the code here.
 
@@ -3260,8 +3243,7 @@ files (specifically, drivers/char/keyboard.c), there is no way to restore it. Be
 This code binds itself to IRQ 1, which is the IRQ of the keyboard controlled under Intel architectures. Then, when it receives a keyboard interrupt, it reads the keyboard's status (that's the purpose of the inb(0x64)) and the scan code, which is the value returned by the keyboard. Then, as soon as the kernel thinks it's feasible, it runs got_char which gives the code of the key
 used (the first seven bits of the scan code) and whether it has been pressed (if the 8th bit is zero) or released (if it's one).
 
-
-**** Example 12-1. intrpt.c
+*** Example 12-1. intrpt.c
 #+BEGIN_SRC: c
 /*
  *  intrpt.c - An interrupt handler.
@@ -3293,9 +3275,9 @@ static struct workqueue_struct *my_workqueue;
  */
 static void got_char(void *scancode)
 {
-        printk(KERN_INFO "Scan Code %x %s.\n",
-               (int)*((char *)scancode) & 0x7F,
-               *((char *)scancode) & 0x80 ? "Released" : "Pressed");
+    printk(KERN_INFO "Scan Code %x %s.\n",
+           (int)*((char *)scancode) & 0x7F,
+           *((char *)scancode) & 0x80 ? "Released" : "Pressed");
 }
 
 /*
@@ -3305,31 +3287,31 @@ static void got_char(void *scancode)
  */
 irqreturn_t irq_handler(int irq, void *dev_id, struct pt_regs *regs)
 {
-        /*
-         * This variables are static because they need to be
-         * accessible (through pointers) to the bottom half routine.
-         */
-        static int initialised = 0;
-        static unsigned char scancode;
-        static struct work_struct task;
-        unsigned char status;
+    /*
+     * This variables are static because they need to be
+     * accessible (through pointers) to the bottom half routine.
+     */
+    static int initialised = 0;
+    static unsigned char scancode;
+    static struct work_struct task;
+    unsigned char status;
 
-        /*
-         * Read keyboard status
-         */
-        status = inb(0x64);
-        scancode = inb(0x60);
+    /*
+     * Read keyboard status
+     */
+    status = inb(0x64);
+    scancode = inb(0x60);
 
-        if (initialised == 0) {
-                INIT_WORK(&task, got_char, &scancode);
-                initialised = 1;
-        } else {
-                PREPARE_WORK(&task, got_char, &scancode);
-        }
+    if (initialised == 0) {
+        INIT_WORK(&task, got_char, &scancode);
+        initialised = 1;
+    } else {
+        PREPARE_WORK(&task, got_char, &scancode);
+    }
 
-        queue_work(my_workqueue, &task);
+    queue_work(my_workqueue, &task);
 
-        return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 /*
@@ -3337,26 +3319,26 @@ irqreturn_t irq_handler(int irq, void *dev_id, struct pt_regs *regs)
  */
 int init_module()
 {
-        my_workqueue = create_workqueue(MY_WORK_QUEUE_NAME);
+    my_workqueue = create_workqueue(MY_WORK_QUEUE_NAME);
 
-        /*
-         * Since the keyboard handler won't co-exist with another handler,
-         * such as us, we have to disable it (free its IRQ) before we do
-         * anything.  Since we don't know where it is, there's no way to
-         * reinstate it later - so the computer will have to be rebooted
-         * when we're done.
-         */
-        free_irq(1, NULL);
+    /*
+     * Since the keyboard handler won't co-exist with another handler,
+     * such as us, we have to disable it (free its IRQ) before we do
+     * anything.  Since we don't know where it is, there's no way to
+     * reinstate it later - so the computer will have to be rebooted
+     * when we're done.
+     */
+    free_irq(1, NULL);
 
-        /*
-         * Request IRQ 1, the keyboard IRQ, to go to our irq_handler.
-         * SA_SHIRQ means we're willing to have othe handlers on this IRQ.
-         * SA_INTERRUPT can be used to make the handler into a fast interrupt.
-         */
-        return request_irq(1,   /* The number of the keyboard IRQ on PCs */
-                           irq_handler, /* our handler */
-                           SA_SHIRQ, "test_keyboard_irq_handler",
-                           (void *)(irq_handler));
+    /*
+     * Request IRQ 1, the keyboard IRQ, to go to our irq_handler.
+     * SA_SHIRQ means we're willing to have othe handlers on this IRQ.
+     * SA_INTERRUPT can be used to make the handler into a fast interrupt.
+     */
+    return request_irq(1,   /* The number of the keyboard IRQ on PCs */
+                       irq_handler, /* our handler */
+                       SA_SHIRQ, "test_keyboard_irq_handler",
+                       (void *)(irq_handler));
 }
 
 /*
@@ -3364,12 +3346,12 @@ int init_module()
  */
 void cleanup_module()
 {
-        /*
-         * This is only here for completeness. It's totally irrelevant, since
-         * we don't have a way to restore the normal keyboard interrupt so the
-         * computer is completely useless and has to be rebooted.
-         */
-        free_irq(1, NULL);
+    /*
+     * This is only here for completeness. It's totally irrelevant, since
+     * we don't have a way to restore the normal keyboard interrupt so the
+     * computer is completely useless and has to be rebooted.
+     */
+    free_irq(1, NULL);
 }
 
 /*
@@ -3394,13 +3376,13 @@ In version 2.2.x, several CPU's can be in the kernel at the same time. This is s
 
 Before I send you on your way to go out into the world and write kernel modules, there are a few things I need to warn you about. If I fail to warn you and something bad happens, please report the problem to me for a full refund of the amount I was paid for your copy of the book.
 
-*** Using standard libraries
+** Using standard libraries
 You can't do that. In a kernel module you can only use kernel functions, which are the functions you can see in /proc/kallsyms.
 
-*** Disabling interrupts
+** Disabling interrupts
 You might need to do this for a short time and that is OK, but if you don't enable them afterwards, your system will be stuck and you'll have to power it off.
 
-*** Sticking your head inside a large carnivore
+** Sticking your head inside a large carnivore
 I probably don't have to warn you about this, but I figured I will anyway, just in case.
 
 * Appendix A. Changes: 2.4 To 2.6
